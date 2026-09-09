@@ -1,0 +1,15 @@
+.root { font-family: Segoe UI, sans-serif; color: #242424; max-width: 960px; }
+.dropZone { border: 2px dashed #605e5c; border-radius: 4px; padding: 18px; margin: 12px 0; background: #faf9f8; }
+.dropZone:focus-within, .dropZone:hover { border-color: #0078d4; background: #f3f9fd; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin: 12px 0; }
+.toolbar label { display: flex; flex-direction: column; gap: 4px; }
+.toolbar button { padding: 7px 12px; }
+.status { padding: 10px; background: #f3f2f1; }
+.error { color: #a4262c; font-weight: 600; }
+.warning { color: #8a6d1d; }
+.results { border-top: 1px solid #ddd; margin-top: 16px; padding-top: 12px; }
+.results dl { display: grid; grid-template-columns: max-content 1fr; gap: 5px 14px; }
+.results dt { font-weight: 600; }
+.results dd { margin: 0; }
+.hint { color: #605e5c; font-size: .9em; }
+.boundary { border-left: 4px solid #0078d4; padding: 8px 12px; background: #f3f9fd; }

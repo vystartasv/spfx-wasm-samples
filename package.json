@@ -7,29 +7,34 @@
     "samples/wasm-local-data-plane",
     "samples/wasm-duckdb-analytics",
     "samples/wasm-duplicate-detector",
-    "samples/wasm-local-ocr"
+    "samples/wasm-local-ocr",
+    "samples/wasm-smart-upload"
   ],
   "scripts": {
-    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector && npm run test:local-ocr",
+    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector && npm run test:local-ocr && npm run test:smart-upload",
     "test:image-upload": "npm --workspace samples/wasm-image-upload run test",
     "test:local-data-plane": "npm --workspace samples/wasm-local-data-plane run test",
     "test:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run test",
     "test:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run test",
     "test:local-ocr": "npm --workspace samples/wasm-local-ocr run test",
-    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics && npm run build:duplicate-detector && npm run build:local-ocr",
+    "test:smart-upload": "npm --workspace samples/wasm-smart-upload run test",
+    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics && npm run build:duplicate-detector && npm run build:local-ocr && npm run build:smart-upload",
     "build:image-upload": "npm --workspace samples/wasm-image-upload run build",
     "build:local-data-plane": "npm --workspace samples/wasm-local-data-plane run build",
     "build:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run build",
     "build:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run build",
     "build:local-ocr": "npm --workspace samples/wasm-local-ocr run build",
-    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics && npm run package:duplicate-detector && npm run package:local-ocr",
+    "build:smart-upload": "npm --workspace samples/wasm-smart-upload run build",
+    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics && npm run package:duplicate-detector && npm run package:local-ocr && npm run package:smart-upload",
     "package:image-upload": "npm --workspace samples/wasm-image-upload run package-solution",
     "package:local-data-plane": "npm --workspace samples/wasm-local-data-plane run package-solution",
     "package:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run package-solution",
     "package:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run package-solution",
     "package:local-ocr": "npm --workspace samples/wasm-local-ocr run package-solution",
+    "package:smart-upload": "npm --workspace samples/wasm-smart-upload run package-solution",
     "start": "npm --workspace samples/wasm-image-upload run start",
-    "start:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run start"
+    "start:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run start",
+    "start:smart-upload": "npm --workspace samples/wasm-smart-upload run start"
   },
   "engines": {
     "node": ">=22.14.0 <23.0.0"
