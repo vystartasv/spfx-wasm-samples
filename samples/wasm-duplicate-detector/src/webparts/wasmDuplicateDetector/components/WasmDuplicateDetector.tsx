@@ -1,0 +1,23 @@
+import * as React from 'react';
+import { DuplicateDetectorClient } from '../client';
+import { DetectorResult, MAX_FILES, MAX_FILE_BYTES, MAX_TOTAL_BYTES, validateInputs } from '../../../core/duplicateDetector';
+import styles from './WasmDuplicateDetector.module.scss';
+import type { IWasmDuplicateDetectorProps } from './IWasmDuplicateDetectorProps';
+interface State { result?: DetectorResult; message: string; error?: string; busy: boolean; }
+export default class WasmDuplicateDetector extends React.Component<IWasmDuplicateDetectorProps, State> {
+  private readonly client = new DuplicateDetectorClient();
+  public state: State = { message: 'Select files to scan locally.', busy: false };
+  public componentWillUnmount(): void { this.client.terminate(); }
+  private scan = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const files = Array.from(event.target.files || []); const errors = validateInputs(files);
+    if (errors.length) { this.setState({ error: errors.join(' '), message: 'Input validation failed.', busy: false }); return; }
+    this.setState({ busy: true, error: undefined, result: undefined, message: 'Hashing selected files in a dedicated worker…' });
+    try { const inputs = await Promise.all(files.map(async file => ({ name: file.name, size: file.size, type: file.type, data: await file.arrayBuffer() }))); const result = await this.client.hash(inputs); this.setState({ result, busy: false, message: `Scan complete: ${result.groups.length} duplicate groups found.` }); }
+    catch (error) { this.setState({ busy: false, error: error instanceof Error ? error.message : String(error), message: 'The scan failed.' }); }
+    event.target.value = '';
+  };
+  private fixture = async (): Promise<void> => { this.setState({ busy: true, error: undefined, result: undefined, message: 'Generating and hashing 10,000 deterministic fixture records…' }); try { const result = await this.client.hash([], 10000); this.setState({ result, busy: false, message: `Fixture scan complete: ${result.groups.length} duplicate groups found.` }); } catch (error) { this.setState({ busy: false, error: error instanceof Error ? error.message : String(error), message: 'The fixture scan failed.' }); } };
+  private cancel = (): void => { this.client.cancel(); this.setState({ busy: false, error: undefined, message: 'Scan cancelled.' }); };
+  private clear = (): void => this.setState({ result: undefined, error: undefined, busy: false, message: 'Select files to scan locally.' });
+  public render(): React.ReactElement { const { result } = this.state; return <section className={styles.root} aria-labelledby="duplicate-detector-title"><h2 id="duplicate-detector-title">Local duplicate file detector</h2><p>Exact duplicate content is identified with SHA-256. File bytes are read and hashed locally; this sample has no upload action.</p><p>Limits: {MAX_FILES} files, {MAX_FILE_BYTES / 1024 / 1024} MB per file, {MAX_TOTAL_BYTES / 1024 / 1024} MB total.</p><div className={styles.status} role="status" aria-live="polite">{this.state.message}</div>{this.state.error && <p className={styles.error} role="alert">{this.state.error}</p>}<div className={styles.toolbar} aria-label="Duplicate detector controls"><label><span>Select files</span><input type="file" multiple onChange={this.scan} disabled={this.state.busy} /></label><button type="button" onClick={this.fixture} disabled={this.state.busy}>Run 10,000-record fixture</button><button type="button" onClick={this.cancel} disabled={!this.state.busy}>Cancel</button><button type="button" onClick={this.clear} disabled={this.state.busy && !result}>Clear results</button></div>{result && <div aria-labelledby="results-title"><h3 id="results-title">Measured results</h3><p>{result.bytesScanned.toLocaleString()} bytes scanned · {result.durationMs.toFixed(2)} ms · engine: {result.engine} · duplicate bytes: {result.duplicateBytes.toLocaleString()}</p>{result.warnings.map(warning => <p className={styles.warning} key={warning}>Warning: {warning}</p>)}<ul aria-label="Duplicate groups">{result.groups.map(group => <li className={styles.group} key={group.hash}><strong>{group.files.length} files · {group.size.toLocaleString()} bytes each</strong><code> {group.hash}</code><table className={styles.table}><caption>Files with SHA-256 {group.hash}</caption><thead><tr><th>Name</th><th>Bytes</th><th>Type</th></tr></thead><tbody>{group.files.map(file => <tr key={file.name}><td>{file.name}</td><td>{file.size}</td><td>{file.type || 'unknown'}</td></tr>)}</tbody></table></li>)}</ul>{!result.groups.length && <p>No exact duplicate content found.</p>}</div>}</section>; }
+}

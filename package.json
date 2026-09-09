@@ -5,22 +5,27 @@
   "workspaces": [
     "samples/wasm-image-upload",
     "samples/wasm-local-data-plane",
-    "samples/wasm-duckdb-analytics"
+    "samples/wasm-duckdb-analytics",
+    "samples/wasm-duplicate-detector"
   ],
   "scripts": {
-    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics",
+    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector",
     "test:image-upload": "npm --workspace samples/wasm-image-upload run test",
     "test:local-data-plane": "npm --workspace samples/wasm-local-data-plane run test",
     "test:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run test",
-    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics",
+    "test:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run test",
+    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics && npm run build:duplicate-detector",
     "build:image-upload": "npm --workspace samples/wasm-image-upload run build",
     "build:local-data-plane": "npm --workspace samples/wasm-local-data-plane run build",
     "build:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run build",
-    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics",
+    "build:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run build",
+    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics && npm run package:duplicate-detector",
     "package:image-upload": "npm --workspace samples/wasm-image-upload run package-solution",
     "package:local-data-plane": "npm --workspace samples/wasm-local-data-plane run package-solution",
     "package:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run package-solution",
-    "start": "npm --workspace samples/wasm-image-upload run start"
+    "package:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run package-solution",
+    "start": "npm --workspace samples/wasm-image-upload run start",
+    "start:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run start"
   },
   "engines": {
     "node": ">=22.14.0 <23.0.0"
