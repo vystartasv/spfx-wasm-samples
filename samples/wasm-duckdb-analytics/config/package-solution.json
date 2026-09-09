@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": { "name": "wasm-duckdb-analytics", "id": "7e0f4db3-0b37-4e32-91f8-cc69d608c84f", "version": "1.0.0.0", "includeClientSideAssets": true, "skipFeatureDeployment": true, "isDomainIsolated": false, "developer": { "name": "SPFx WASM Samples maintainers", "websiteUrl": "https://learn.microsoft.com/sharepoint/dev/spfx", "privacyUrl": "https://privacy.microsoft.com/", "termsOfUseUrl": "https://www.microsoft.com/legal/terms-of-use", "mpnId": "" }, "metadata": { "shortDescription": { "default": "DuckDB-WASM analytical workload comparison" }, "longDescription": { "default": "A measured native TypeScript and DuckDB-WASM aggregation comparison." }, "screenshotPaths": [], "videoUrl": "", "categories": [] }, "features": [{ "title": "DuckDB analytics feature", "description": "Activates the DuckDB analytics web part.", "id": "fc33d47d-2f0e-4aef-aa60-87f5dbf67f9b", "version": "1.0.0.0", "componentIds": ["a9f99bbf-3f2a-4a90-8a07-1fe44d4f0a5a"] }] },
+  "paths": { "zippedPackage": "solution/wasm-duckdb-analytics.sppkg" }
+}
