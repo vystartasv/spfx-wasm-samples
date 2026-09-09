@@ -37,7 +37,7 @@ export class SqliteStore {
 
   static async create(namespace: Namespace): Promise<SqliteStore> {
     const store = new SqliteStore();
-    const sqlite3 = await (await import('@sqlite.org/sqlite-wasm')).default();
+    const sqlite3 = await (await import(/* webpackChunkName: 'sqlite-wasm' */ '@sqlite.org/sqlite-wasm')).default();
     await store.open(sqlite3 as unknown as SqliteModule, namespace);
     return store;
   }

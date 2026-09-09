@@ -14,6 +14,7 @@ import { createImageProcessorWorker } from '../workers/imageProcessor.worker';
 import * as strings from 'WasmImageUploadWebPartStrings';
 
 type IWasmWorkerMessage = { ready: true } | IWorkerResponse;
+let nextInstanceId = 0;
 
 interface IWasmImageUploadState {
   files: File[];
@@ -25,6 +26,7 @@ interface IWasmImageUploadState {
 }
 
 export default class WasmImageUpload extends React.Component<IWasmImageUploadProps, IWasmImageUploadState> {
+  private readonly ids = `wasm-image-${++nextInstanceId}`;
   private readonly _fileInput = React.createRef<HTMLInputElement>();
   private _worker?: Worker;
 
@@ -47,17 +49,17 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
     const originalBytes = files.reduce((total, file) => total + file.size, 0);
 
     return (
-      <section className={styles.wasmImageUpload} aria-labelledby="wasm-image-upload-heading">
-        <h2 id="wasm-image-upload-heading">{strings.title}</h2>
+      <section className={styles.wasmImageUpload} aria-labelledby={`${this.ids}-heading`}>
+        <h2 id={`${this.ids}-heading`}>{strings.title}</h2>
         <p className={styles.intro}>
           {strings.intro}
         </p>
 
         <div className={styles.controls}>
-          <label htmlFor="wasm-image-file-input">{strings.chooseFiles}</label>
+          <label htmlFor={`${this.ids}-file-input`}>{strings.chooseFiles}</label>
           <input
             ref={this._fileInput}
-            id="wasm-image-file-input"
+            id={`${this.ids}-file-input`}
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
             multiple={true}
@@ -83,8 +85,8 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
         )}
 
         {result && (
-          <div className={styles.results} aria-labelledby="wasm-image-results-heading">
-            <h3 id="wasm-image-results-heading">{strings.measuredResult}</h3>
+          <div className={styles.results} aria-labelledby={`${this.ids}-results-heading`}>
+            <h3 id={`${this.ids}-results-heading`}>{strings.measuredResult}</h3>
             <dl>
               <div><dt>{strings.engine}</dt><dd>{result.engine}</dd></div>
               <div><dt>{strings.originalTotal}</dt><dd>{formatBytes(result.originalBytes)}</dd></div>
@@ -127,12 +129,10 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
         throw new Error(strings.noWorkers);
       }
 
-      const inputFiles: IWorkerRequest['files'] = await Promise.all(this.state.files.map(async file => ({
-        name: file.name,
-        type: file.type,
-        bytes: file.size,
-        data: await file.arrayBuffer()
-      })));
+      const inputFiles: IWorkerRequest['files'] = [];
+      for (const file of this.state.files) {
+        inputFiles.push({ name: file.name, type: file.type, bytes: file.size, data: await file.arrayBuffer() });
+      }
       const result = await this._runWorkers({ files: inputFiles, maxDimension: 2048, quality: 0.82 });
       this.setState({ result, isProcessing: false, status: strings.complete });
     } catch (processingError) {

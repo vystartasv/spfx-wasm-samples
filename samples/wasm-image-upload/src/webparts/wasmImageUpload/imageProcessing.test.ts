@@ -23,7 +23,8 @@ describe('image processing helpers', () => {
   test('validates image type, count, and size', () => {
     expect(validateImageFiles([{ name: 'a.jpg', type: 'image/jpeg', size: 10 }])).toEqual([]);
     expect(validateImageFiles([{ name: 'notes.txt', type: 'text/plain', size: 10 }])).toEqual(['notes.txt is not an image file.']);
-    expect(validateImageFiles([{ name: 'large.jpg', type: 'image/jpeg', size: 20 * 1024 * 1024 + 1 }])).toEqual(['large.jpg is larger than the 20 MB limit.']);
+    expect(validateImageFiles([{ name: 'large.jpg', type: 'image/jpeg', size: 20 * 1024 * 1024 + 1 }])).toEqual(['Selected images exceed the 20 MB total limit.', 'large.jpg is larger than the 20 MB limit.']);
+    expect(validateImageFiles([{ name: 'a.jpg', type: 'image/jpeg', size: 12 * 1024 * 1024 }, { name: 'b.jpg', type: 'image/jpeg', size: 9 * 1024 * 1024 }])).toContain('Selected images exceed the 20 MB total limit.');
   });
 
   test('shapes a benchmark result from supplied measurements', () => {

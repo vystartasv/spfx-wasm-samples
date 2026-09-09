@@ -7,5 +7,5 @@ export function sharePointUploadUrl(pageUrl: string, folder: string, filename: s
   const origin = locationOrigin || (typeof window !== 'undefined' ? window.location.origin : undefined);
   if (origin && site.origin !== origin) throw new Error('SharePoint site URL must use the current page origin.');
   const encodeOData = (value: string): string => encodeURIComponent(value.replace(/'/g, "''"));
-  return `${site.origin}${site.pathname.replace(/\/$/, '')}/_api/web/GetFolderByServerRelativeUrl('${encodeOData(folder)}')/Files/add(overwrite=true,url='${encodeOData(filename)}')`;
+  return `${site.origin}${site.pathname.replace(/\/$/, '')}/_api/web/GetFolderByServerRelativeUrl('${encodeOData(folder)}')/Files/add(overwrite=false,url='${encodeOData(filename)}')`;
 }

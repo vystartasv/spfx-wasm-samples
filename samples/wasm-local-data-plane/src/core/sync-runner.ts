@@ -2,7 +2,14 @@ import { Adapter, ContactRecord, ProjectRecord, SourceState, SyncReport, UserRec
 import { classifyFailure } from './sync-contract';
 import { SqliteStore } from './sqlite-store';
 
-function validRecord(record: unknown): boolean { return !!record && typeof record === 'object' && typeof (record as { id?: unknown }).id === 'string' && typeof (record as { changedAt?: unknown }).changedAt === 'number'; }
+export function validRecord(record: unknown, kind: 'users' | 'projects' | 'contacts'): boolean {
+  if (!record || typeof record !== 'object') return false;
+  const value = record as Record<string, unknown>;
+  const common = typeof value.id === 'string' && value.id.length > 0 && Number.isFinite(value.changedAt) && (value.deleted === undefined || typeof value.deleted === 'boolean');
+  if (!common) return false;
+  const fields = kind === 'users' ? ['displayName', 'mail', 'department'] : kind === 'projects' ? ['name', 'ownerId', 'status'] : ['name', 'email', 'account'];
+  return fields.every(field => typeof value[field] === 'string' && (value[field] as string).length > 0) && (kind !== 'projects' || ['Active', 'Planned', 'Done'].indexOf(value.status as string) >= 0);
+}
 
 export async function syncSource<T>(source: string, adapter: Adapter<T>, store: SqliteStore, state: SourceState | undefined, kind: 'users' | 'projects' | 'contacts', forceBootstrap = false): Promise<SyncReport> {
   const mode = !forceBootstrap && state?.deltaLink ? 'delta' : 'bootstrap';
@@ -17,7 +24,7 @@ export async function syncSource<T>(source: string, adapter: Adapter<T>, store: 
       counters.requests += 1;
       counters.items += page.items.length;
       counters.bytes += new TextEncoder().encode(JSON.stringify(page.items)).byteLength;
-      page.items.forEach(item => { if (!validRecord(item)) throw Object.assign(new Error('Adapter returned a malformed record.'), { code: 'MALFORMED_RECORD' }); const record = item as T & { deleted?: boolean }; if (record.deleted) deleted += 1; else applied += 1; });
+      page.items.forEach(item => { if (!validRecord(item, kind)) throw Object.assign(new Error('Adapter returned a malformed record.'), { code: 'MALFORMED_RECORD' }); const record = item as T & { deleted?: boolean }; if (record.deleted) deleted += 1; else applied += 1; });
       cursor = page.nextLink;
       store.applySyncPage(source, kind, page.items as unknown as UserRecord[], cursor, page.deltaLink);
       committedCursor = cursor || page.deltaLink || committedCursor;

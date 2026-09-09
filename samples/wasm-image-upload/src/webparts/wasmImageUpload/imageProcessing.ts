@@ -117,6 +117,10 @@ export function validateImageFiles(files: ReadonlyArray<Pick<File, 'name' | 'siz
     errors.push(`Select no more than ${MAX_IMAGE_FILES} image files at a time.`);
   }
 
+  const totalBytes = files.reduce((total, file) => total + file.size, 0);
+  if (totalBytes > MAX_IMAGE_BYTES) {
+    errors.push(`Selected images exceed the ${formatBytes(MAX_IMAGE_BYTES)} total limit.`);
+  }
   files.forEach(file => {
     if (!file.type.toLowerCase().startsWith('image/')) {
       errors.push(`${file.name} is not an image file.`);

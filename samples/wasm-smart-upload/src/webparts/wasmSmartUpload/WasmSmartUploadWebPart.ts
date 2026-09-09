@@ -25,6 +25,7 @@ export default class WasmSmartUploadWebPart extends BaseClientSideWebPart<IWasmS
     const url = sharePointUploadUrl(site.absoluteUrl, folder, source.name);
     const options: ISPHttpClientOptions = { headers: { Accept: 'application/json;odata=nometadata', 'Content-Type': source.type || 'application/octet-stream' }, body: new Blob([source.data], { type: source.type || 'application/octet-stream' }) };
     const response = await this.context.spHttpClient.post(url, SPHttpClient.configurations.v1, options);
+    if (response.status === 409) throw new Error('SharePoint upload conflict; the existing file was preserved.');
     if (!response.ok) throw new Error(`SharePoint upload failed (${response.status} ${response.statusText}).`);
     const body = await response.json() as { ServerRelativeUrl?: string };
     return { url: body.ServerRelativeUrl || url, bytes: source.data.byteLength, remote: true };

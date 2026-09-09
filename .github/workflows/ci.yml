@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:coherence
+      - run: npm test
+      - run: npm run build
+      - run: npm run package-solution
+      - run: git diff --check
+      - name: Source and secret checks
+        run: |
+          ! rg -n --hidden --glob '!node_modules/**' --glob '!package-lock.json' '(BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,})' .
+          ! rg -n --glob '!*.md' '<!-- (PATH TO CDN|STORAGE ACCOUNT NAME|ACCESS KEY) -->' samples

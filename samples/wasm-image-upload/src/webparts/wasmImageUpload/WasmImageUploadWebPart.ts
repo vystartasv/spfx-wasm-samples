@@ -46,7 +46,8 @@ export default class WasmImageUploadWebPart extends BaseClientSideWebPart<IWasmI
   private readonly _uploadFiles = async (files: IProcessedImage[]): Promise<number> => {
     const site = this.context.pageContext.web;
     const folder = `${site.serverRelativeUrl.replace(/\/$/, '')}/SiteAssets`;
-    const uploaded = await Promise.all(files.map(async file => {
+    let uploaded = 0;
+    for (const file of files) {
       const url = sharePointUploadUrl(site.absoluteUrl, folder, file.name);
       const options: ISPHttpClientOptions = {
         headers: {
@@ -56,12 +57,15 @@ export default class WasmImageUploadWebPart extends BaseClientSideWebPart<IWasmI
         body: new Blob([file.data], { type: file.type })
       };
       const response = await this.context.spHttpClient.post(url, SPHttpClient.configurations.v1, options);
+      if (response.status === 409) {
+        throw new Error(`SharePoint upload conflict for ${file.name}; the existing file was preserved.`);
+      }
       if (!response.ok) {
         throw new Error(`SharePoint upload failed for ${file.name} (${response.status}).`);
       }
-      return response.ok;
-    }));
-    return uploaded.filter(Boolean).length;
+      uploaded += 1;
+    }
+    return uploaded;
   };
 
 }

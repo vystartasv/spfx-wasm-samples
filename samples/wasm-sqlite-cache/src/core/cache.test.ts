@@ -3,7 +3,7 @@ import { MemoryStore } from './memory-store';
 import { applyMigrations, MIGRATIONS } from './schema';
 import { namespaceFilename, openCacheStore } from './sqlite-store';
 import type { Namespace } from './types';
-import { isValidRpcRequest } from './types';
+import { isValidRpcRequest, validateMutationPayload } from './types';
 
 const namespace = (userObjectId: string): Namespace => ({ tenantId: 'tenant-a', userObjectId, applicationId: 'sqlite-cache-test' });
 
@@ -17,4 +17,5 @@ describe('SQLite cache contracts', () => {
   test('fallback status shapes warning and memory mode', () => { const status = new MemoryStore(namespace('user-a'), 'SQLite failed').status(); expect(status.storage).toBe('memory'); expect(status.warning).toBe('SQLite failed'); expect(status.sqliteVersion).toBe('fallback'); });
   test('cache initialization resolves only after store.open', async () => { const calls: string[] = []; const store = { open: async () => { await Promise.resolve(); calls.push('open'); }, status: () => ({}) } as never; await openCacheStore({ version: { libVersion: 'test' }, oo1: { DB: class {} as never } }, namespace('user-a'), store); expect(calls).toEqual(['open']); });
   test.each([null, 1, {}, { version: 2, id: 'x', method: 'status' }, { version: 1, method: 'status' }, { version: 1, id: 'x', method: 'unknown' }])('rejects malformed cache RPC requests: %p', request => expect(isValidRpcRequest(request)).toBe(false));
+  test('rejects unsafe mutation fields and non-finite amounts', () => { expect(() => validateMutationPayload('add', { title: 'x', category: 'Blue', amount: Infinity })).toThrow(); expect(() => validateMutationPayload('update', { id: 'x', patch: { id: 'other' } })).toThrow(); expect(() => validateMutationPayload('delete', { id: '' })).toThrow(); });
 });

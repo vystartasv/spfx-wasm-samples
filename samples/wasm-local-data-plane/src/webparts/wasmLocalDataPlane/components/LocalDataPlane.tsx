@@ -6,8 +6,10 @@ import * as strings from 'WasmLocalDataPlaneWebPartStrings';
 
 export interface LocalDataPlaneProps { namespace: Namespace; }
 interface State { status?: Status; rows: ShowcaseRow[]; message: string; error?: string; busy: boolean; offline: boolean; benchmark: Array<{ name: string; ms: number; rows: number }>; }
+let nextInstanceId = 0;
 
 export default class LocalDataPlane extends React.Component<LocalDataPlaneProps, State> {
+  private readonly ids = `local-data-plane-${++nextInstanceId}`;
   private readonly client = new DataPlaneClient();
   public state: State = { rows: [], message: strings.initial, busy: true, offline: typeof navigator !== 'undefined' && !navigator.onLine, benchmark: [] };
   public async componentDidMount(): Promise<void> { window.addEventListener('online', this.online); window.addEventListener('offline', this.offline); try { await this.client.init(this.props.namespace); await this.refresh(strings.ready); } catch (error) { this.fail(error); } }
@@ -22,8 +24,8 @@ export default class LocalDataPlane extends React.Component<LocalDataPlaneProps,
   private async optimisticWrite(): Promise<void> { await this.run(strings.optimisticRunning, async () => { await this.client.mutate('project-00001', { name: strings.demoEdit }); await this.client.flush(); }); }
   public render(): React.ReactElement {
     const status = this.state.status;
-    return <section className={styles.root} aria-labelledby="local-data-plane-title">
-      <h2 id="local-data-plane-title">{strings.title}</h2>
+    return <section className={styles.root} aria-labelledby={`${this.ids}-title`}>
+      <h2 id={`${this.ids}-title`}>{strings.title}</h2>
       <p>{strings.description}</p>
       <div className={styles.status} role="status" aria-live="polite">{this.state.message} {this.state.offline ? strings.offlineLabel : strings.onlineLabel} {status ? strings.storageStatus.replace('{0}', status.storage).replace('{1}', String(status.pendingWrites)).replace('{2}', String(status.conflicts)).replace('{3}', status.dbBytes === null ? strings.unavailable : String(status.dbBytes)) : ''}</div>
       {this.state.error && <p className={styles.error} role="alert">{this.state.error}</p>}
