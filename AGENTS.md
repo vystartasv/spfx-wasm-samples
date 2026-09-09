@@ -1,33 +1,13 @@
-# Agent routing guide
+# Operating contract
 
-This repository contains self-contained SharePoint Framework (SPFx) samples that demonstrate browser-local WebAssembly, Web Workers, SQLite/DuckDB, OCR, duplicate detection, and explicit upload boundaries.
+Pick one sample. Read its README, architecture/limitations/benchmark docs, source, tests, package/config, and `sample.yml` before editing. Preserve unrelated worktree changes and do not reorganize samples.
 
-## Sources of truth
+Every sample keeps metadata with purpose, WASM/baseline, execution, network, SharePoint writes, privacy, limits, claims, maturity, and licensing. Claims are `VERIFIED`, `EXPECTED`, `EXPERIMENTAL`, or `NOT SUPPORTED`; without tenant/browser evidence maturity is at most L2. Evidence means a reproducible command or controlled browser run, never inference from a dependency README.
 
-- Repository intent and sample inventory: [README.md](README.md)
-- Contributor workflow: [CONTRIBUTING.md](CONTRIBUTING.md)
-- Sample behavior, architecture, limits, and benchmarks: each sample's `README.md` and its `docs/` directory
-- Implementation: the selected sample's `src/`
-- Tests: the selected sample's `src/**/*.test.ts` and `src/**/*.test.tsx`
-- Workspace scripts and versions: root and sample `package.json` files
+Canonical repository guidance lives under [docs/](docs/), including the metadata contract at [docs/standards/SAMPLE-CONTRACT.md](docs/standards/SAMPLE-CONTRACT.md) and the technical WASM security model at [docs/SECURITY.md](docs/SECURITY.md). The root [SECURITY.md](SECURITY.md) is for vulnerability reporting.
 
-## Bootstrap and verification
+Prefer a native baseline, a dedicated worker for expensive/stateful work, a versioned typed RPC contract, bounded inputs, cancellation, visible engine/status/error, accessible localized UI, and explicit upload boundaries. Local storage, workers, WASM, hashes, and namespaces are not authority boundaries.
 
-Use Node 22 (the package engine is `>=22.14.0 <23.0.0`) and run:
+Do not fabricate timings, screenshots, tenant/browser support, privacy/security guarantees, offline durability, production readiness, or upload success. Do not add secrets, tenant data, telemetry, CDN dependencies, or SharePoint writes to a `writes:false` sample. Do not commit generated build/package output.
 
-```sh
-npm ci
-npm run check:coherence
-npm test
-npm run build
-npm run package-solution
-git diff --check
-```
-
-Run a targeted workspace command while iterating, for example `npm --workspace samples/wasm-sqlite-cache test` or `npm --workspace samples/wasm-sqlite-cache run build`.
-
-## Contribution boundaries
-
-Agents are invited contributors. They may open focused pull requests or issues. Pick one sample, read its README and architecture/benchmark/limitations docs, inspect existing tests, make the narrowest useful change, add or update deterministic tests, and run targeted then root verification. Do not claim tenant validation, browser behavior, CSP, OPFS durability, SharePoint permissions, or performance results without evidence from that environment. Never fabricate benchmark numbers, screenshots, users, tenant data, or test results.
-
-Never add secrets, tokens, tenant identifiers, production data, or credentials. Keep generated build/package output out of commits unless a sample explicitly tracks it; clean generated output before submitting. Preserve unrelated worktree changes and avoid broad refactors.
+Before review run `npm ci`, `npm run check:coherence`, targeted and root `npm test`, `npm run build`, `npm run package-solution`, and `git diff --check`. Clean generated output and report exact warnings and unresolved deployment evidence. Do not commit or push unless explicitly requested.

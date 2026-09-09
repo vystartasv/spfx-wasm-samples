@@ -13,7 +13,7 @@ npm ci
 npm run check:coherence
 ```
 
-Choose a sample under `samples/`, then read its `README.md`, `docs/`, source, and tests. Workspaces are independent SPFx projects, while root scripts run the same operation across all seven samples.
+Choose a sample under `samples/`, then read its `README.md`, `docs/`, source, tests, and `sample.yml`. Repository-wide guidance and the metadata contract are under [`docs/`](docs/). Workspaces are independent SPFx projects, while root scripts run the same operation across all nine samples.
 
 ## Development and verification
 

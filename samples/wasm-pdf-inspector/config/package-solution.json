@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": { "name": "spfx-wasm-pdf-inspector", "id": "f04f1f10-0c88-4ea8-9e1d-48a8ca5bfb7a", "version": "1.0.0.0", "includeClientSideAssets": true, "skipFeatureDeployment": true, "isDomainIsolated": false, "developer": { "name": "SPFx WASM Samples maintainers", "websiteUrl": "https://learn.microsoft.com/sharepoint/dev/spfx", "privacyUrl": "https://privacy.microsoft.com/", "termsOfUseUrl": "https://www.microsoft.com/legal/terms-of-use", "mpnId": "" }, "metadata": { "shortDescription": { "default": "Local PDF inspector" }, "longDescription": { "default": "Inspect selected local PDFs with a dedicated PDFium WASM worker." }, "screenshotPaths": [], "videoUrl": "", "categories": [] }, "features": [{ "title": "PDF Inspector", "description": "Activates the local PDF inspector web part.", "id": "f9cfce30-3f2e-45fd-bd28-6ddcd8dbfe1d", "version": "1.0.0.0", "componentIds": ["a6d3c901-0b5d-4b08-b15a-38b8ac1368ca"] }] },
+  "paths": { "zippedPackage": "solution/spfx-wasm-pdf-inspector.sppkg" }
+}

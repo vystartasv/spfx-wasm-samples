@@ -1,6 +1,6 @@
 # WASM SQLite cache
 
-Small focused SPFx 1.23.2 sample showing a worker-owned offline-first cache for one SharePoint-list-style dataset. It demonstrates schema migration, deterministic fixture hydration, local search/filter/sort, optimistic CRUD, outbox markers, explicit simulated sync success/failure/conflict states, namespace keying, reset, OPFS preference, and memory fallback.
+Small focused SPFx 1.23.2 sample showing a worker-owned local cache for one SharePoint-list-style dataset. It demonstrates schema migration, deterministic fixture hydration, local search/filter/sort, optimistic CRUD, outbox markers, explicit simulated sync success/failure/conflict states, namespace keying, reset, OPFS preference, and memory fallback.
 
 ## Run
 

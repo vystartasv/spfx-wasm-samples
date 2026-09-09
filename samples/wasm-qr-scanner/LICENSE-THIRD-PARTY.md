@@ -1,0 +1,3 @@
+# Third-party license attribution
+
+This sample bundles `@undecaf/zbar-wasm` 0.11.0, licensed under SPDX `LGPL-2.1-or-later`. The package declares that license in its npm manifest and distributes the complete GNU Lesser General Public License v2.1 text as `LICENSE`; the durable source is the pinned npm tarball recorded by `package-lock.json` and the upstream project at https://github.com/undecaf/zbar-wasm. Before redistribution, run `npm ci`, verify the lockfile integrity and package version, inspect `LICENSE`, README, and `dist/zbar.wasm`, and retain the exact license text plus corresponding source/notices with the release. This sample does not modify ZBar.

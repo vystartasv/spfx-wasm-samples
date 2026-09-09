@@ -1,0 +1,7 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": { "wasm-pdf-inspector-web-part": { "components": [{ "entrypoint": "./lib/webparts/wasmPdfInspector/WasmPdfInspectorWebPart.js", "manifest": "./src/webparts/wasmPdfInspector/WasmPdfInspectorWebPart.manifest.json" }] } },
+  "externals": {},
+  "localizedResources": { "WasmPdfInspectorWebPartStrings": "lib/webparts/wasmPdfInspector/loc/{locale}.js" }
+}
