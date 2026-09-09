@@ -1,0 +1,9 @@
+.root { font-family: Segoe UI, sans-serif; color: #242424; max-width: 1000px; }
+.toolbar, .form { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; align-items: end; }
+.toolbar button, .form button, .form input, .form select { padding: 6px 9px; }
+.status { padding: 9px; background: #f3f2f1; }
+.warning { color: #8a6d1d; background: #fff4ce; padding: 8px; }
+.error { color: #a4262c; }
+.table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+.table th, .table td { border: 1px solid #ddd; padding: 7px; text-align: left; }
+.panel { border-top: 1px solid #ddd; margin-top: 16px; padding-top: 12px; }

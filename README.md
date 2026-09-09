@@ -6,6 +6,7 @@ This is an example-first repository of practical, runnable SharePoint Framework 
 
 - [`samples/wasm-image-upload/`](samples/wasm-image-upload/) — select multiple local images, optimize them in a dedicated Web Worker, inspect measured byte and duration changes, and explicitly upload the optimized files to the current SharePoint site.
 - [`samples/wasm-local-data-plane/`](samples/wasm-local-data-plane/) — Milestone 1 local SQLite-WASM data-plane experiment with worker-owned OPFS/in-memory storage, deterministic Graph/SharePoint mocks, sync contracts, and measured local queries.
+- [`samples/wasm-sqlite-cache/`](samples/wasm-sqlite-cache/) — focused worker-owned SQLite-WASM cache for one list-style dataset with local CRUD, query, outbox, and simulated sync states.
 
 The first sample is a complete generated SPFx project at `samples/wasm-image-upload/`. Root commands delegate to that workspace and the root lockfile keeps installation reproducible.
 
