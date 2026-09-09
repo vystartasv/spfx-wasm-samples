@@ -1,0 +1,17 @@
+{
+  "name": "spfx-wasm-samples",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "samples/wasm-image-upload"
+  ],
+  "scripts": {
+    "test": "npm --workspace samples/wasm-image-upload run test",
+    "build": "npm --workspace samples/wasm-image-upload run build",
+    "package-solution": "npm --workspace samples/wasm-image-upload run package-solution",
+    "start": "npm --workspace samples/wasm-image-upload run start"
+  },
+  "engines": {
+    "node": ">=22.14.0 <23.0.0"
+  }
+}

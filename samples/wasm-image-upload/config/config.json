@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "wasm-image-upload-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/wasmImageUpload/WasmImageUploadWebPart.js",
+          "manifest": "./src/webparts/wasmImageUpload/WasmImageUploadWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "WasmImageUploadWebPartStrings": "lib/webparts/wasmImageUpload/loc/{locale}.js"
+  }
+}

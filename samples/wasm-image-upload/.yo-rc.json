@@ -1,0 +1,23 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "spfx-wasm-samples",
+    "environment": "spo",
+    "packageManager": "npm",
+    "useGulp": false,
+    "componentType": "webpart",
+    "template": "react",
+    "componentName": "WasmImageUpload",
+    "componentDescription": "Optimize local images and optionally upload them to SharePoint",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.22.2",
+    "sdksVersions": {},
+    "version": "1.23.2",
+    "libraryName": "spfx-wasm-samples",
+    "libraryId": "7de75837-9abd-4a94-9fdf-796adefda156",
+    "solutionShortDescription": "spfx-wasm-samples description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false
+  }
+}
