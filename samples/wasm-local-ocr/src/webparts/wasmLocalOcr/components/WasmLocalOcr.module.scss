@@ -1,0 +1,8 @@
+.root { font-family: Segoe UI, sans-serif; max-width: 760px; color: #242424; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin: 16px 0; }
+.toolbar label, .toolbar select { display: flex; flex-direction: column; gap: 4px; }
+.status { padding: 10px; background: #f3f2f1; border-left: 4px solid #0078d4; }
+.warning { padding: 8px; background: #fff4ce; }
+.error { padding: 8px; background: #fde7e9; color: #a4262c; }
+.text { min-height: 120px; width: 100%; box-sizing: border-box; font: 14px Consolas, monospace; }
+.meta { color: #605e5c; }
