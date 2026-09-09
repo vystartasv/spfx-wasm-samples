@@ -7,9 +7,12 @@ import {
   IWorkerRequest,
   IWorkerResponse,
   MAX_IMAGE_BYTES,
+  selectImageEngine,
   validateImageFiles
 } from '../imageProcessing';
 import { createImageProcessorWorker } from '../workers/imageProcessor.worker';
+
+type IWasmWorkerMessage = { ready: true } | IWorkerResponse;
 
 interface IWasmImageUploadState {
   files: File[];
@@ -128,14 +131,68 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
         bytes: file.size,
         data: await file.arrayBuffer()
       })));
-      const transfer = inputFiles.map(file => file.data);
-      const result = await this._runWorker({ files: inputFiles, maxDimension: 2048, quality: 0.82 }, transfer);
+      const result = await this._runWorkers({ files: inputFiles, maxDimension: 2048, quality: 0.82 });
       this.setState({ result, isProcessing: false, status: 'Optimization complete. Values below came from this run.' });
     } catch (processingError) {
       const message = processingError instanceof Error ? processingError.message : 'Image processing failed.';
       this.setState({ isProcessing: false, error: message, status: 'Optimization could not be completed.' });
     }
   };
+
+  private async _runWorkers(request: IWorkerRequest): Promise<IBenchmarkResult> {
+    const nativeRequest: IWorkerRequest = {
+      ...request,
+      files: request.files.map(file => ({ ...file, data: file.data.slice(0) }))
+    };
+
+    try {
+      const { createWasmImageProcessorWorker } = await import(
+        /* webpackChunkName: "wasm-image-processor" */ '../workers/wasmImageProcessor.worker.factory'
+      );
+      return await this._runWasmWorker(createWasmImageProcessorWorker, request, request.files.map(file => file.data));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      const selection = selectImageEngine(false, `WASM worker unavailable (${message}); used browser-native encoding.`);
+      return this._runWorker({ ...nativeRequest, warnings: selection.warnings }, nativeRequest.files.map(file => file.data));
+    }
+  }
+
+  private _runWasmWorker(
+    createWorker: () => Worker,
+    request: IWorkerRequest,
+    transfer: ArrayBuffer[]
+  ): Promise<IBenchmarkResult> {
+    return new Promise<IBenchmarkResult>((resolve, reject) => {
+      let worker: Worker;
+      try {
+        // This module is lazy; all image work still starts only after the worker handshake.
+        worker = createWorker();
+        this._worker = worker;
+      } catch (error) {
+        reject(new Error(`The WASM image worker could not be started: ${String(error)}`));
+        return;
+      }
+
+      worker.onmessage = (event: MessageEvent<IWasmWorkerMessage>) => {
+        if ('ready' in event.data) {
+          worker.postMessage(request, transfer);
+          return;
+        }
+        worker.terminate();
+        this._worker = undefined;
+        if (event.data.ok) {
+          resolve(event.data.result);
+        } else {
+          reject(new Error(event.data.error));
+        }
+      };
+      worker.onerror = event => {
+        worker.terminate();
+        this._worker = undefined;
+        reject(new Error(event.message || 'The WASM image worker failed.'));
+      };
+    });
+  }
 
   private _runWorker(request: IWorkerRequest, transfer: ArrayBuffer[]): Promise<IBenchmarkResult> {
     return new Promise<IBenchmarkResult>((resolve, reject) => {

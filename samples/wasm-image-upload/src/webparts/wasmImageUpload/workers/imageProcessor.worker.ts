@@ -1,4 +1,4 @@
-import type { IWorkerInputFile } from '../imageProcessing';
+import type { IWorkerRequest } from '../imageProcessing';
 
 export function createImageProcessorWorker(): Worker {
   const source = `(${workerMain.toString()})();`;
@@ -47,7 +47,7 @@ function workerMain(): void {
     }
   }
 
-  async function process(request: { files: IWorkerInputFile[]; maxDimension: number; quality: number }): Promise<unknown> {
+  async function process(request: IWorkerRequest): Promise<unknown> {
     if (typeof createImageBitmap !== 'function') {
       return { ok: false, error: 'This browser does not provide createImageBitmap in a worker.' };
     }
@@ -58,7 +58,7 @@ function workerMain(): void {
     const started = performance.now();
     const outputFiles: Array<{ name: string; type: string; bytes: number; data: ArrayBuffer }> = [];
     let orientationAware = true;
-    const warnings: string[] = [];
+    const warnings: string[] = request.warnings ? request.warnings.slice() : [];
 
     for (const input of request.files) {
       const decoded = await decode(new Blob([input.data], { type: input.type }));
@@ -88,7 +88,7 @@ function workerMain(): void {
     return {
       ok: true,
       result: {
-        engine: 'Browser-native worker',
+        engine: 'Browser-native',
         originalBytes,
         optimizedBytes,
         bytesSaved: originalBytes - optimizedBytes,

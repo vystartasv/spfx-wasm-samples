@@ -1,6 +1,7 @@
 import {
   calculatePercentageSaved,
   formatBytes,
+  selectImageEngine,
   shapeBenchmarkResult,
   validateImageFiles
 } from './imageProcessing';
@@ -26,14 +27,22 @@ describe('image processing helpers', () => {
   });
 
   test('shapes a benchmark result from supplied measurements', () => {
-    const result = shapeBenchmarkResult(2000, 1500, 12.5, 'Browser-native worker', [], true);
+    const result = shapeBenchmarkResult(2000, 1500, 12.5, 'Browser-native', [], true);
     expect(result).toMatchObject({
       originalBytes: 2000,
       optimizedBytes: 1500,
       bytesSaved: 500,
       percentageSaved: 25,
       durationMs: 12.5,
-      engine: 'Browser-native worker'
+      engine: 'Browser-native'
+    });
+  });
+
+  test('selects WASM only when its lazy worker is available', () => {
+    expect(selectImageEngine(true)).toEqual({ engine: 'WASM', warnings: [] });
+    expect(selectImageEngine(false, 'WASM worker failed; used browser-native encoding.')).toEqual({
+      engine: 'Browser-native',
+      warnings: ['WASM worker failed; used browser-native encoding.']
     });
   });
 });

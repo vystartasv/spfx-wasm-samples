@@ -1,7 +1,12 @@
 export const MAX_IMAGE_FILES = 20;
 export const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 
-export type ImageEngine = 'Browser-native worker';
+export type ImageEngine = 'WASM' | 'Browser-native';
+
+export interface IEngineSelection {
+  engine: ImageEngine;
+  warnings: string[];
+}
 
 export interface IProcessedImage {
   name: string;
@@ -33,6 +38,7 @@ export interface IWorkerRequest {
   files: IWorkerInputFile[];
   maxDimension: number;
   quality: number;
+  warnings?: string[];
 }
 
 export type IWorkerResponse =
@@ -89,6 +95,16 @@ export function shapeBenchmarkResult(
     orientationAware,
     warnings,
     files
+  };
+}
+
+export function selectImageEngine(wasmWorkerAvailable: boolean, fallbackWarning?: string): IEngineSelection {
+  if (wasmWorkerAvailable) {
+    return { engine: 'WASM', warnings: [] };
+  }
+  return {
+    engine: 'Browser-native',
+    warnings: fallbackWarning ? [fallbackWarning] : []
   };
 }
 
