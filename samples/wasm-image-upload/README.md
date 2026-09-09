@@ -2,7 +2,7 @@
 
 This is the first runnable sample in the repository. It selects multiple local images, optimizes them in a dedicated Web Worker, reports measured before/after bytes and processing duration, and uploads the optimized JPEGs only after the user activates the upload button.
 
-The displayed engine is `Browser-native worker`. A WASM engine is not bundled in Milestone 1: a self-contained `@jsquash/jpeg` worker/WASM asset path that builds and packages reliably with SPFx 1.23.2 Heft has not been verified. The sample never claims that WASM is faster.
+The displayed engine is the engine used for the run: `WASM`, `Browser-native`, or `WASM + Browser-native` when individual files use both after a fallback. `@jsquash/jpeg` 1.6.0 is loaded only through a lazy worker path. Codec, WebAssembly, fetch/CSP, worker-start, and encode failures are reported as warnings and use browser-native encoding. The sample never claims that WASM is faster.
 
 ## Prerequisites
 
@@ -36,6 +36,8 @@ Upload `sharepoint/solution/spfx-wasm-samples.sppkg` to the organization’s Sha
 ## Browser support
 
 The processing path requires a Web Worker, worker `createImageBitmap`, `OffscreenCanvas`, a 2D context, and `convertToBlob`. The UI reports an accessible error when a required capability is unavailable and does not run the expensive pipeline on the main thread. EXIF orientation is requested with `imageOrientation: "from-image"`; when the browser rejects that option, the result carries a visible warning.
+
+The existing native worker is created from a Blob, so package imports cannot be resolved inside that Blob. The WASM path therefore uses a separate lazy Webpack worker asset. SPFx's manifest audit treats that browser worker as a non-component runtime chunk; the Heft customization excludes only that chunk from component-dependency audit metadata while retaining the emitted worker and its runtime.
 
 ## Privacy and limitations
 

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "wasm-local-data-plane-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/wasmLocalDataPlane/WasmLocalDataPlaneWebPart.js",
+          "manifest": "./src/webparts/wasmLocalDataPlane/WasmLocalDataPlaneWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "WasmLocalDataPlaneWebPartStrings": "lib/webparts/wasmLocalDataPlane/loc/{locale}.js"
+  }
+}

@@ -38,13 +38,13 @@
   - https://developer.mozilla.org/en-US/docs/Web/API/Window/crossOriginIsolated
   - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Opener-Policy
 
-## Milestone 1 technology decision
+## Implemented technology decision
 
-### Default engine: browser-native worker pipeline
+### Native fallback: browser-native worker pipeline
 
 Use `createImageBitmap` → `OffscreenCanvas` → `convertToBlob` in a dedicated worker. This handles local decode, orientation-aware resizing, re-encoding, byte measurement, and UI-thread avoidance without shipping a large runtime.
 
-This is intentionally included as the baseline: WASM is not automatically better when browser-native APIs already solve the workload.
+This remains the fallback: WASM is not automatically better when browser-native APIs already solve the workload.
 
 ### Optional engine: lazy-loaded WASM codec
 
@@ -53,7 +53,9 @@ Include a separately loaded WASM codec only if the implementation produces a mea
 - https://github.com/jamsinclair/jSquash
 - https://www.npmjs.com/package/@jsquash/jpeg
 
-The WASM path must be optional, feature-detected, benchmarked against native encoding, and have a native fallback. It must not make initial page load or SharePoint deployment fragile.
+The implementation loads the WASM worker only after optimization begins. The codec is initialized from a fetched emitted `.wasm` URL, and WebAssembly absence, fetch/compile/CSP failure, codec failure, and encode failure return to browser-native encoding with visible warnings. The native worker remains available when the lazy worker module cannot start.
+
+The current Blob worker cannot resolve package imports because its source is serialized into a Blob URL. The WASM path is consequently a separate lazy worker module. The SPFx customization keeps the worker chunk out of component-dependency audit metadata because it is a browser worker asset rather than a SharePoint component entry.
 
 ## Alternatives rejected for Milestone 1
 
@@ -71,5 +73,6 @@ The WASM path must be optional, feature-detected, benchmarked against native enc
 ## Evidence boundaries
 
 - No tenant validation was performed during this research.
+- Repository builds verify emitted worker/WASM assets and package construction; they do not verify tenant CSP or runtime worker loading.
 - SharePoint page CSP and worker behavior must be checked in an authorized tenant before claiming production compatibility.
 - No benchmark values are claimed here. The sample must generate measurements from actual fixture inputs and display those measurements in the UI.

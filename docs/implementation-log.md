@@ -15,3 +15,12 @@
 
 - `npm ci`, tests, build, and solution packaging are repository checks only; they do not validate an authorized SharePoint tenant.
 - Tenant CSP, worker asset loading, Site Assets availability, permissions, and upload behavior require validation in an authorized tenant.
+
+## 2026-09-09 — Lazy WASM worker slice
+
+- Added `@jsquash/jpeg` 1.6.0 as a lazy codec dependency. The initial web-part path does not import the codec.
+- Added the SPFx Heft customization that emits `.wasm` with `asset/resource`, uses a same-origin client-side asset URL, and explicitly leaves `asyncWebAssembly` disabled.
+- Kept the existing Blob worker as the native path. Because package imports cannot resolve inside that Blob, the WASM path is a separate lazy Webpack worker asset; image decode, resize, and both encoders remain in workers.
+- Added native fallback warnings for lazy-worker startup, WebAssembly, WASM fetch/compile/CSP, codec, and encode failures. Results report the measured engine, duration, original bytes, optimized bytes, and warnings.
+- Added deterministic tests for engine selection, mixed-engine selection, fallback warnings, and measured result shaping. No benchmark values were added.
+- Repository verification passed: `npm ci`, `npm test`, `npm run build`, and `npm run package-solution`. Tenant validation remains pending.

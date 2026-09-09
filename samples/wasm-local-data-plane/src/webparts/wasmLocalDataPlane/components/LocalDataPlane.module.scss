@@ -1,0 +1,8 @@
+.root { font-family: Segoe UI, sans-serif; color: #242424; max-width: 1100px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.toolbar button { padding: 6px 10px; }
+.status { padding: 8px; background: #f3f2f1; }
+.error { color: #a4262c; }
+.table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+.table th, .table td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+.panel { border-top: 1px solid #ddd; margin-top: 16px; padding-top: 12px; }

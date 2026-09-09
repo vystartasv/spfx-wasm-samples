@@ -1,0 +1,43 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "wasm-local-data-plane",
+    "id": "2d7c6c84-4d68-4e08-bb6b-f8c4a84f7f10",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "SPFx WASM Samples maintainers",
+      "websiteUrl": "https://learn.microsoft.com/sharepoint/dev/spfx",
+      "privacyUrl": "https://privacy.microsoft.com/",
+      "termsOfUseUrl": "https://www.microsoft.com/legal/terms-of-use",
+      "mpnId": ""
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Runnable local data plane experiment"
+      },
+      "longDescription": {
+        "default": "SQLite-WASM local cache experiment with deterministic Graph and SharePoint adapters."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "SPFx WASM Samples Feature",
+        "description": "The feature that activates the local data plane web part.",
+        "id": "465edb32-1154-4f2b-90c0-a8fbf98da9a3",
+        "version": "1.0.0.0",
+        "componentIds": [
+          "6e50b3b4-5e2f-4e15-8295-27b8d2db0a11"
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/wasm-local-data-plane.sppkg"
+  }
+}

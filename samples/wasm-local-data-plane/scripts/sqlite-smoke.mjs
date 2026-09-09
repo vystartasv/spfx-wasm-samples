@@ -1,0 +1,20 @@
+import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const { SqliteStore } = require('../lib-commonjs/core/sqlite-store.js');
+const sqlite3 = await sqlite3InitModule();
+const store = new SqliteStore();
+const status = await store.open(sqlite3, { tenantId: 'smoke-tenant', userObjectId: 'smoke-user', applicationId: 'smoke-app' });
+if (!/^\d+\.\d+/.test(status.sqliteVersion) || !['memory', 'opfs'].includes(status.storage)) throw new Error('SQLite-WASM smoke status was invalid.');
+store.upsertUsers([{ id: 'user-00001', displayName: 'Smoke user', mail: 'smoke@example.test', department: 'Test', changedAt: 1 }]);
+store.upsertProjects([{ id: 'project-00001', name: 'Smoke project', ownerId: 'user-00001', status: 'Active', changedAt: 1 }]);
+if (store.query({ limit: 1 })[0]?.ownerName !== 'Smoke user') throw new Error('SQLite-WASM smoke join failed.');
+store.mutateProject('project-00001', { name: 'Optimistic smoke edit' });
+const outbox = store.pendingOutbox();
+if (outbox.length !== 1 || outbox[0].baseChangedAt !== 1) throw new Error('SQLite-WASM outbox transition failed.');
+store.markOutbox(outbox[0].id, 'conflict');
+store.addConflict('project-00001', outbox[0].payload, { ...outbox[0].payload, name: 'Remote smoke edit', changedAt: 2 });
+if (store.conflictCount() !== 1 || store.pendingCount() !== 1) throw new Error('SQLite-WASM conflict transition failed.');
+store.close();
+console.log(`SQLite-WASM smoke passed (${status.sqliteVersion}, ${status.storage}).`);

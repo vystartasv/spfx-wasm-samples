@@ -28,4 +28,4 @@ That feature was subsequently removed. This repository keeps the lessons and evi
 
 ## Application here
 
-The native worker path remains Milestone 1's baseline. The optional WASM codec must be added only behind the same boundary, measured against native encoding on identical fixtures, and retained only if the measured result justifies its packaging and tenant-risk cost.
+The native worker path remains the fallback. This slice applies the same boundary: `@jsquash/jpeg` 1.6.0 is loaded only by a separate lazy worker, the emitted `.wasm` is fetched and compiled explicitly, and browser-native encoding remains available for worker startup, WebAssembly, fetch/CSP, codec, and encode failures. The UI reports measured values and warnings without a performance conclusion. The repository build verifies packaging; tenant CSP and runtime behavior remain unverified.

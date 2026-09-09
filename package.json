@@ -3,12 +3,19 @@
   "version": "0.0.1",
   "private": true,
   "workspaces": [
-    "samples/wasm-image-upload"
+    "samples/wasm-image-upload",
+    "samples/wasm-local-data-plane"
   ],
   "scripts": {
-    "test": "npm --workspace samples/wasm-image-upload run test",
-    "build": "npm --workspace samples/wasm-image-upload run build",
-    "package-solution": "npm --workspace samples/wasm-image-upload run package-solution",
+    "test": "npm run test:image-upload && npm run test:local-data-plane",
+    "test:image-upload": "npm --workspace samples/wasm-image-upload run test",
+    "test:local-data-plane": "npm --workspace samples/wasm-local-data-plane run test",
+    "build": "npm run build:image-upload && npm run build:local-data-plane",
+    "build:image-upload": "npm --workspace samples/wasm-image-upload run build",
+    "build:local-data-plane": "npm --workspace samples/wasm-local-data-plane run build",
+    "package-solution": "npm run package:image-upload && npm run package:local-data-plane",
+    "package:image-upload": "npm --workspace samples/wasm-image-upload run package-solution",
+    "package:local-data-plane": "npm --workspace samples/wasm-local-data-plane run package-solution",
     "start": "npm --workspace samples/wasm-image-upload run start"
   },
   "engines": {

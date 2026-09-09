@@ -86,6 +86,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
             <h3 id="wasm-image-results-heading">Measured result</h3>
             <dl>
               <div><dt>Engine</dt><dd>{result.engine}</dd></div>
+              <div><dt>Original total</dt><dd>{formatBytes(result.originalBytes)}</dd></div>
               <div><dt>Optimized total</dt><dd>{formatBytes(result.optimizedBytes)}</dd></div>
               <div><dt>Bytes saved</dt><dd>{formatBytes(Math.abs(result.bytesSaved))}{result.bytesSaved < 0 ? ' increase' : ''}</dd></div>
               <div><dt>Percentage saved</dt><dd>{result.percentageSaved}%</dd></div>
