@@ -1,4 +1,4 @@
-import { chunkIdentity, chunkRanges, createFixture, prepareUpload, simulateResumableTransfer, validateUpload } from './smartUpload';
+import { canPublishPrepareResult, chunkIdentity, chunkRanges, createFixture, prepareUpload, simulateResumableTransfer, validateUpload } from './smartUpload';
 const testSubtle = { digest: async (): Promise<ArrayBuffer> => new ArrayBuffer(32) } as unknown as SubtleCrypto;
 
 describe('smart upload contracts', () => {
@@ -25,4 +25,5 @@ describe('smart upload contracts', () => {
     expect(simulateResumableTransfer(result)).toEqual(result.chunks.map(chunk => chunk.identity));
     expect(simulateResumableTransfer(result)).toEqual(simulateResumableTransfer(result));
   });
+  test('cancelled fallback cannot publish a successful result', () => { const cancelled = new Set(['request-1']); expect(canPublishPrepareResult(cancelled, 'request-1')).toBe(false); expect(canPublishPrepareResult(cancelled, 'request-2')).toBe(true); });
 });

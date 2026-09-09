@@ -1,4 +1,7 @@
-import { Aggregate, aggregateRows, AnalyticsRow } from './fixture';
+import { Aggregate, aggregateRows, AGGREGATION_SQL, AnalyticsRow } from './fixture';
+
+export const duckdbAggregationQuery = (): string => AGGREGATION_SQL;
+export function isValidAnalyticsRequest(value: unknown): value is { id: number; method: 'load' | 'run' | 'clear' } { return !!value && typeof value === 'object' && typeof (value as { id?: unknown }).id === 'number' && ['load', 'run', 'clear'].indexOf((value as { method?: string }).method || '') >= 0; }
 
 export interface MeasuredResult { engine: 'native' | 'duckdb'; durationMs: number; inputRows: number; groups: Aggregate[]; query?: string; status: 'ok' | 'error'; error?: string; }
 export function shapeResult(engine: MeasuredResult['engine'], startedAt: number, inputRows: number, groups: Aggregate[], query?: string): MeasuredResult { return { engine, durationMs: performance.now() - startedAt, inputRows, groups, query, status: 'ok' }; }

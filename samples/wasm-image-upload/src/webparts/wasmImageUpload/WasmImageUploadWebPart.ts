@@ -9,6 +9,7 @@ import * as strings from 'WasmImageUploadWebPartStrings';
 import WasmImageUpload from './components/WasmImageUpload';
 import type { IWasmImageUploadProps } from './components/IWasmImageUploadProps';
 import type { IProcessedImage } from './imageProcessing';
+import { sharePointUploadUrl } from './uploadUrl';
 
 export interface IWasmImageUploadWebPartProps {
   description: string;
@@ -46,7 +47,7 @@ export default class WasmImageUploadWebPart extends BaseClientSideWebPart<IWasmI
     const site = this.context.pageContext.web;
     const folder = `${site.serverRelativeUrl.replace(/\/$/, '')}/SiteAssets`;
     const uploaded = await Promise.all(files.map(async file => {
-      const url = `${site.absoluteUrl}/_api/web/GetFolderByServerRelativeUrl('${this._sharePointPath(folder)}')/Files/add(overwrite=true,url='${this._sharePointPath(file.name)}')`;
+      const url = sharePointUploadUrl(site.absoluteUrl, folder, file.name);
       const options: ISPHttpClientOptions = {
         headers: {
           Accept: 'application/json;odata=nometadata',
@@ -63,7 +64,4 @@ export default class WasmImageUploadWebPart extends BaseClientSideWebPart<IWasmI
     return uploaded.filter(Boolean).length;
   };
 
-  private _sharePointPath(value: string): string {
-    return encodeURI(value.replace(/'/g, "''")).replace(/'/g, '%27');
-  }
 }

@@ -1,7 +1,7 @@
 import { MockCrmContactsAdapter, MockEnterpriseAdapter, MockGraphUsersAdapter, MockSharePointListAdapter } from '../../../core/adapters';
 import { hydrateAll, syncSource } from '../../../core/sync-runner';
 import { SqliteStore } from '../../../core/sqlite-store';
-import { CONTRACT_VERSION, Namespace, ProjectRecord, RpcRequest, RpcResponse } from '../../../core/types';
+import { CONTRACT_VERSION, isValidRpcRequest, Namespace, ProjectRecord, RpcRequest, RpcResponse } from '../../../core/types';
 
 const scope = self as unknown as { onmessage: ((event: MessageEvent<RpcRequest>) => void) | null; postMessage: (message: RpcResponse) => void };
 let store: SqliteStore | undefined;
@@ -59,4 +59,4 @@ async function handle(request: RpcRequest): Promise<unknown> {
   }
 }
 
-scope.onmessage = event => { handle(event.data).then(result => scope.postMessage({ version: CONTRACT_VERSION, id: event.data.id, ok: true, result })).catch(error => scope.postMessage(errorResponse(event.data, error))); };
+scope.onmessage = event => { const request = event.data; const usable = !!request && typeof request === 'object' && typeof request.id === 'string' ? request.id : undefined; if (!isValidRpcRequest(request)) { if (usable) scope.postMessage({ version: CONTRACT_VERSION, id: usable, ok: false, error: { code: 'BAD_REQUEST', message: 'Malformed worker request.', retryable: false } }); return; } handle(request).then(result => scope.postMessage({ version: CONTRACT_VERSION, id: request.id, ok: true, result })).catch(error => scope.postMessage(errorResponse(request, error))); };

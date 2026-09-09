@@ -1,2 +1,2 @@
-declare interface IWasmSqliteCacheWebPartStrings { PropertyPaneDescription: string; BasicGroupName: string; DescriptionFieldLabel: string; }
+declare interface IWasmSqliteCacheWebPartStrings { PropertyPaneDescription: string; BasicGroupName: string; DescriptionFieldLabel: string; searchLabel: string; red: string; blue: string; green: string; edited: string; sqlite: string; lastSync: string; queryUpdated: string; modeStatus: string; enterTitle: string; [key: string]: string; }
 declare module 'WasmSqliteCacheWebPartStrings' { const strings: IWasmSqliteCacheWebPartStrings; export = strings; }

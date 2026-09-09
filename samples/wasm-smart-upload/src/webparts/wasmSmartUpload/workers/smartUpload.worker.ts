@@ -5,9 +5,10 @@ const cancelled = new Set<string>();
 
 scope.onmessage = event => {
   const request = event.data;
-  if (!request || request.version !== RPC_VERSION || typeof request.id !== 'string') return;
+  if (!request || typeof request !== 'object' || request.version !== RPC_VERSION || typeof request.id !== 'string' || typeof request.method !== 'string') return;
   if (request.method === 'cancel') { cancelled.add(request.id); return; }
   if (request.method !== 'prepare') return;
+  if (request.fixture !== undefined && typeof request.fixture !== 'boolean') { scope.postMessage({ version: RPC_VERSION, id: request.id, ok: false, error: { code: 'BAD_REQUEST', message: 'Malformed prepare payload.' } }); return; }
   const input = request.fixture ? createFixture() : request.input;
   if (!input) { scope.postMessage({ version: RPC_VERSION, id: request.id, ok: false, error: { code: 'INVALID_INPUT', message: 'A file is required.' } }); return; }
   prepareUpload(input, request.chunkSize, () => cancelled.has(request.id)).then(result => {

@@ -14,6 +14,7 @@ export interface PrepareResult {
 }
 export interface PrepareRequest { version: number; id: string; input?: UploadInput; fixture?: boolean; chunkSize: number; method: 'prepare' | 'cancel'; }
 export interface PrepareResponse { version: number; id: string; ok: boolean; result?: PrepareResult; error?: { code: string; message: string }; }
+export function canPublishPrepareResult(cancelled: ReadonlySet<string>, requestId: string): boolean { return !cancelled.has(requestId); }
 
 export function validateUpload(file: Pick<UploadInput, 'name' | 'size'> | undefined, chunkSize: number): string[] {
   const errors: string[] = [];

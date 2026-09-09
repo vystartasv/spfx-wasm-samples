@@ -40,3 +40,4 @@ export interface RpcResponse {
   result?: unknown;
   error?: { code: string; message: string; retryable: boolean; details?: unknown };
 }
+export function isValidRpcRequest(value: unknown): value is RpcRequest { if (!value || typeof value !== 'object') return false; const request = value as RpcRequest; if (request.version !== CONTRACT_VERSION || typeof request.id !== 'string' || typeof request.method !== 'string' || ['init', 'hydrate', 'sync', 'query-showcase', 'status', 'mutate-optimistic-project', 'flush-outbox', 'simulate-conflict', 'clear-data'].indexOf(request.method) < 0) return false; return request.payload === undefined || (!!request.payload && typeof request.payload === 'object'); }

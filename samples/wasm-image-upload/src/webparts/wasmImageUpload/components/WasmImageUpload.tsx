@@ -11,6 +11,7 @@ import {
   validateImageFiles
 } from '../imageProcessing';
 import { createImageProcessorWorker } from '../workers/imageProcessor.worker';
+import * as strings from 'WasmImageUploadWebPartStrings';
 
 type IWasmWorkerMessage = { ready: true } | IWorkerResponse;
 
@@ -31,7 +32,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
     super(props);
     this.state = {
       files: [],
-      status: 'Select one or more local image files to begin.',
+      status: strings.initialStatus,
       isProcessing: false,
       isUploading: false
     };
@@ -47,13 +48,13 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
 
     return (
       <section className={styles.wasmImageUpload} aria-labelledby="wasm-image-upload-heading">
-        <h2 id="wasm-image-upload-heading">WASM image upload sample</h2>
+        <h2 id="wasm-image-upload-heading">{strings.title}</h2>
         <p className={styles.intro}>
-          Images are optimized locally in a worker. Nothing is uploaded until you explicitly choose the upload action.
+          {strings.intro}
         </p>
 
         <div className={styles.controls}>
-          <label htmlFor="wasm-image-file-input">Choose image files</label>
+          <label htmlFor="wasm-image-file-input">{strings.chooseFiles}</label>
           <input
             ref={this._fileInput}
             id="wasm-image-file-input"
@@ -62,7 +63,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
             multiple={true}
             onChange={this._onFilesChanged}
           />
-          <p className={styles.hint}>Up to 20 files, with each file up to {formatBytes(MAX_IMAGE_BYTES)}.</p>
+          <p className={styles.hint}>{strings.fileHint.replace('{0}', formatBytes(MAX_IMAGE_BYTES))}</p>
         </div>
 
         <div className={styles.status} role="status" aria-live="polite" aria-atomic="true">{status}</div>
@@ -70,34 +71,34 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
 
         {files.length > 0 && (
           <div className={styles.selection}>
-            <h3>Selection</h3>
-            <p>{files.length} file{files.length === 1 ? '' : 's'} · {formatBytes(originalBytes)} original total</p>
+            <h3>{strings.selection}</h3>
+            <p>{strings.fileCount.replace('{0}', String(files.length)).replace('{1}', files.length === 1 ? '' : 's').replace('{2}', formatBytes(originalBytes))}</p>
             <ul>
               {files.map(file => <li key={`${file.name}-${file.lastModified}`}>{file.name} ({formatBytes(file.size)})</li>)}
             </ul>
             <button type="button" onClick={this._optimize} disabled={isProcessing}>
-              {isProcessing ? 'Optimizing…' : 'Optimize locally'}
+              {isProcessing ? strings.optimizing : strings.optimize}
             </button>
           </div>
         )}
 
         {result && (
           <div className={styles.results} aria-labelledby="wasm-image-results-heading">
-            <h3 id="wasm-image-results-heading">Measured result</h3>
+            <h3 id="wasm-image-results-heading">{strings.measuredResult}</h3>
             <dl>
-              <div><dt>Engine</dt><dd>{result.engine}</dd></div>
-              <div><dt>Original total</dt><dd>{formatBytes(result.originalBytes)}</dd></div>
-              <div><dt>Optimized total</dt><dd>{formatBytes(result.optimizedBytes)}</dd></div>
-              <div><dt>Bytes saved</dt><dd>{formatBytes(Math.abs(result.bytesSaved))}{result.bytesSaved < 0 ? ' increase' : ''}</dd></div>
-              <div><dt>Percentage saved</dt><dd>{result.percentageSaved}%</dd></div>
-              <div><dt>Processing duration</dt><dd>{result.durationMs.toFixed(2)} ms</dd></div>
+              <div><dt>{strings.engine}</dt><dd>{result.engine}</dd></div>
+              <div><dt>{strings.originalTotal}</dt><dd>{formatBytes(result.originalBytes)}</dd></div>
+              <div><dt>{strings.optimizedTotal}</dt><dd>{formatBytes(result.optimizedBytes)}</dd></div>
+              <div><dt>{strings.bytesSaved}</dt><dd>{formatBytes(Math.abs(result.bytesSaved))}{result.bytesSaved < 0 ? strings.increase : ''}</dd></div>
+              <div><dt>{strings.percentageSaved}</dt><dd>{result.percentageSaved}%</dd></div>
+              <div><dt>{strings.processingDuration}</dt><dd>{result.durationMs.toFixed(2)} ms</dd></div>
             </dl>
-            {!result.orientationAware && <p className={styles.warning}>The browser could not apply EXIF orientation metadata during decode.</p>}
+            {!result.orientationAware && <p className={styles.warning}>{strings.orientationWarning}</p>}
             {result.warnings.map(warning => <p className={styles.warning} key={warning}>{warning}</p>)}
             <button type="button" onClick={this._upload} disabled={isUploading}>
-              {isUploading ? 'Uploading…' : 'Upload optimized files to SharePoint'}
+              {isUploading ? strings.uploading : strings.upload}
             </button>
-            <p className={styles.hint}>Upload is explicit and targets this site’s Site Assets library.</p>
+            <p className={styles.hint}>{strings.uploadHint}</p>
           </div>
         )}
       </section>
@@ -111,7 +112,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
       files: errors.length === 0 ? files : [],
       result: undefined,
       error: errors.length > 0 ? errors.join(' ') : undefined,
-      status: errors.length > 0 ? 'Selection needs attention.' : `${files.length} image file${files.length === 1 ? '' : 's'} selected.`
+      status: errors.length > 0 ? strings.selectionAttention : strings.filesSelected.replace('{0}', String(files.length)).replace('{1}', files.length === 1 ? '' : 's')
     });
   };
 
@@ -120,10 +121,10 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
       return;
     }
 
-    this.setState({ isProcessing: true, error: undefined, status: 'Reading files and starting the worker…', result: undefined });
+    this.setState({ isProcessing: true, error: undefined, status: strings.reading, result: undefined });
     try {
       if (typeof Worker === 'undefined') {
-        throw new Error('This browser does not provide Web Workers. Processing cannot start without blocking the page.');
+        throw new Error(strings.noWorkers);
       }
 
       const inputFiles: IWorkerRequest['files'] = await Promise.all(this.state.files.map(async file => ({
@@ -133,10 +134,10 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
         data: await file.arrayBuffer()
       })));
       const result = await this._runWorkers({ files: inputFiles, maxDimension: 2048, quality: 0.82 });
-      this.setState({ result, isProcessing: false, status: 'Optimization complete. Values below came from this run.' });
+      this.setState({ result, isProcessing: false, status: strings.complete });
     } catch (processingError) {
-      const message = processingError instanceof Error ? processingError.message : 'Image processing failed.';
-      this.setState({ isProcessing: false, error: message, status: 'Optimization could not be completed.' });
+      const message = processingError instanceof Error ? processingError.message : strings.processingFailed;
+      this.setState({ isProcessing: false, error: message, status: strings.failed });
     }
   };
 
@@ -170,7 +171,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
         worker = createWorker();
         this._worker = worker;
       } catch (error) {
-        reject(new Error(`The WASM image worker could not be started: ${String(error)}`));
+        reject(new Error(`${strings.wasmWorkerStartup} ${String(error)}`));
         return;
       }
 
@@ -190,7 +191,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
       worker.onerror = event => {
         worker.terminate();
         this._worker = undefined;
-        reject(new Error(event.message || 'The WASM image worker failed.'));
+        reject(new Error(event.message || strings.wasmWorkerFailed));
       };
     });
   }
@@ -217,7 +218,7 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
       worker.onerror = event => {
         worker.terminate();
         this._worker = undefined;
-        reject(new Error(event.message || 'The image worker failed.'));
+        reject(new Error(event.message || strings.workerFailed));
       };
       worker.postMessage(request, transfer);
     });
@@ -228,13 +229,13 @@ export default class WasmImageUpload extends React.Component<IWasmImageUploadPro
       return;
     }
 
-    this.setState({ isUploading: true, error: undefined, status: 'Uploading optimized files to this SharePoint site…' });
+    this.setState({ isUploading: true, error: undefined, status: strings.uploadingStatus });
     try {
       const count = await this.props.uploadFiles(this.state.result.files);
-      this.setState({ isUploading: false, status: `${count} optimized file${count === 1 ? '' : 's'} uploaded to Site Assets.` });
+      this.setState({ isUploading: false, status: strings.uploaded.replace('{0}', String(count)).replace('{1}', count === 1 ? '' : 's') });
     } catch (uploadError) {
-      const message = uploadError instanceof Error ? uploadError.message : 'SharePoint upload failed.';
-      this.setState({ isUploading: false, error: message, status: 'Upload could not be completed.' });
+      const message = uploadError instanceof Error ? uploadError.message : strings.sharePointFailed;
+      this.setState({ isUploading: false, error: message, status: strings.uploadFailed });
     }
   };
 }

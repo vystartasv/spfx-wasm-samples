@@ -8,7 +8,7 @@
 - Kept image decode, resize, and JPEG encoding in a dedicated worker using `createImageBitmap` with `imageOrientation: "from-image"` when accepted, `OffscreenCanvas`, and `convertToBlob`.
 - Unsupported worker/image capabilities return an error to the UI; the sample does not move expensive processing onto the main thread.
 - Upload uses `context.pageContext.web.absoluteUrl`, `serverRelativeUrl`, and `context.spHttpClient` to add optimized JPEGs to the current site’s Site Assets library. No custom API permission request is included.
-- Did not include `@jsquash/jpeg`: a self-contained SPFx 1.23.2 Heft worker/WASM asset-loading path was not verified, so the sample retains a clean native baseline and makes no WASM performance claim.
+- Superseded by the later “Lazy WASM worker slice” entry below: the initial implementation did not include `@jsquash/jpeg`; that decision was later consolidated into the verified lazy worker/WASM path. The historical decision and its verification boundary are retained.
 - Added deterministic helper tests and generated SVG fixture instructions. No benchmark results, large binaries, or tenant screenshots are included.
 
 ## Evidence boundary

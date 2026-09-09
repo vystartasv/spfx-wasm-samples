@@ -8,6 +8,7 @@ import * as strings from 'WasmSmartUploadWebPartStrings';
 import WasmSmartUpload from './components/WasmSmartUpload';
 import type { IWasmSmartUploadProps } from './components/IWasmSmartUploadProps';
 import type { SmallUploadSource, UploadReceipt, IUploadAdapter } from '../../core/smartUpload';
+import { sharePointUploadUrl } from './uploadUrl';
 
 export interface IWasmSmartUploadWebPartProps { description: string; }
 
@@ -21,12 +22,11 @@ export default class WasmSmartUploadWebPart extends BaseClientSideWebPart<IWasmS
   private async uploadSmall(source: SmallUploadSource): Promise<UploadReceipt> {
     const site = this.context.pageContext.web;
     const folder = `${site.serverRelativeUrl.replace(/\/$/, '')}/SiteAssets`;
-    const url = `${site.absoluteUrl}/_api/web/GetFolderByServerRelativeUrl('${this.encodePath(folder)}')/Files/add(overwrite=true,url='${this.encodePath(source.name)}')`;
+    const url = sharePointUploadUrl(site.absoluteUrl, folder, source.name);
     const options: ISPHttpClientOptions = { headers: { Accept: 'application/json;odata=nometadata', 'Content-Type': source.type || 'application/octet-stream' }, body: new Blob([source.data], { type: source.type || 'application/octet-stream' }) };
     const response = await this.context.spHttpClient.post(url, SPHttpClient.configurations.v1, options);
     if (!response.ok) throw new Error(`SharePoint upload failed (${response.status} ${response.statusText}).`);
     const body = await response.json() as { ServerRelativeUrl?: string };
     return { url: body.ServerRelativeUrl || url, bytes: source.data.byteLength, remote: true };
   }
-  private encodePath(value: string): string { return encodeURI(value.replace(/'/g, "''")).replace(/'/g, '%27'); }
 }

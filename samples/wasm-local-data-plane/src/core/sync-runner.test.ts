@@ -19,4 +19,12 @@ describe('sync page commits', () => {
     expect(calls).toEqual(pages.map(({ nextLink, deltaLink }) => ({ nextLink, deltaLink })));
     expect(report.cursor).toBe(pages[1].deltaLink);
   });
+
+  test('malformed records reject through syncSource without advancing the cursor', async () => {
+    const calls: Array<{ nextLink: string | null; deltaLink: string | null }> = [];
+    const store = { applySyncPage: (_source: string, _kind: string, _items: UserRecord[], nextLink: string | null, deltaLink: string | null) => calls.push({ nextLink, deltaLink }) } as unknown as SqliteStore;
+    const adapter = { bootstrap: async () => ({ items: [{ invalid: true }], nextLink: 'bad-next', deltaLink: 'bad-delta' }), delta: async () => ({ items: [], nextLink: null, deltaLink: null }), write: async (record: UserRecord) => ({ record }) } as unknown as Adapter<UserRecord>;
+    await expect(syncSource('users', adapter, store, undefined, 'users', true)).rejects.toMatchObject({ code: 'MALFORMED_RECORD' });
+    expect(calls).toEqual([]);
+  });
 });

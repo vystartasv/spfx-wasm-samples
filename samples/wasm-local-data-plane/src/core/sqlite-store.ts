@@ -6,6 +6,7 @@ interface SqliteModule { version: { libVersion: string }; oo1: { DB: new (filena
 export type StorageKind = 'opfs' | 'memory';
 
 const namespaceKey = (namespace: Namespace): string => JSON.stringify([namespace.tenantId, namespace.userObjectId, namespace.applicationId]);
+export async function namespaceFilename(namespace: Namespace, subtle: SubtleCrypto = globalThis.crypto.subtle): Promise<string> { const digest = await subtle.digest('SHA-256', new TextEncoder().encode(namespaceKey(namespace))); return Array.from(new Uint8Array(digest), byte => ('0' + byte.toString(16)).slice(-2)).join(''); }
 const rows = <T>(db: SqliteDb, sql: string, bind: unknown[] = []): T[] => db.exec({ sql, bind, returnValue: 'resultRows', rowMode: 'object' }) as T[];
 
 export class SqliteStore {
@@ -21,7 +22,7 @@ export class SqliteStore {
     this.lastError = null;
     try {
       if (sqlite3.oo1.OpfsDb) {
-        this.db = new sqlite3.oo1.OpfsDb(`/wasm-local-data-plane-${btoa(namespaceKey(namespace)).replace(/[^a-z0-9]/gi, '').slice(0, 48)}.sqlite3`);
+        this.db = new sqlite3.oo1.OpfsDb(`/wasm-local-data-plane-${await namespaceFilename(namespace)}.sqlite3`);
         this.storage = 'opfs';
       } else throw new Error('OPFS unavailable in this browser context.');
     } catch (error) {

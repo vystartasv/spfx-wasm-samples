@@ -1,8 +1,8 @@
 import * as duckdb from '@duckdb/duckdb-wasm';
 import duckdbWorkerAsset from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js';
 import duckdbWasmAsset from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm';
-import { shapeDuckdbRows } from '../../../core/analytics';
-import { AGGREGATION_SQL, AnalyticsRow, fixtureRows } from '../../../core/fixture';
+import { duckdbAggregationQuery, isValidAnalyticsRequest, shapeDuckdbRows } from '../../../core/analytics';
+import { AnalyticsRow, fixtureRows } from '../../../core/fixture';
 
 type Request = { id: number; method: 'load' | 'run' | 'clear' };
 type Response = { id: number; ok: boolean; result?: unknown; error?: string };
@@ -28,10 +28,10 @@ async function handle(request: Request): Promise<unknown> {
   const conn = await ensureDuckDb();
   await db?.registerFileText('fixture.json', JSON.stringify(currentRows));
   await conn.query('CREATE OR REPLACE TABLE fixture AS SELECT * FROM read_json_auto(\'fixture.json\')');
-  const result = await conn.query(AGGREGATION_SQL);
+  const result = await conn.query(duckdbAggregationQuery());
   const groups = shapeDuckdbRows(result.toArray() as Array<Record<string, unknown>>);
-  return { engine: 'duckdb', durationMs: performance.now() - startedAt, inputRows: currentRows.length, groups, query: AGGREGATION_SQL, status: 'ok' };
+  return { engine: 'duckdb', durationMs: performance.now() - startedAt, inputRows: currentRows.length, groups, query: duckdbAggregationQuery(), status: 'ok' };
 }
 
 const scope = self as unknown as { onmessage: (event: MessageEvent<Request>) => void; postMessage: (response: Response) => void };
-scope.onmessage = event => { handle(event.data).then(result => scope.postMessage({ id: event.data.id, ok: true, result })).catch(error => scope.postMessage({ id: event.data.id, ok: false, error: error instanceof Error ? error.message : String(error) })); };
+scope.onmessage = event => { const request = event.data; const usable = !!request && typeof request === 'object' && (typeof request.id === 'number' || typeof request.id === 'string') ? request.id : undefined; if (!isValidAnalyticsRequest(request)) { if (usable !== undefined) scope.postMessage({ id: usable, ok: false, error: 'Malformed or unknown worker request.' }); return; } handle(request).then(result => scope.postMessage({ id: request.id, ok: true, result })).catch(error => scope.postMessage({ id: request.id, ok: false, error: error instanceof Error ? error.message : String(error) })); };

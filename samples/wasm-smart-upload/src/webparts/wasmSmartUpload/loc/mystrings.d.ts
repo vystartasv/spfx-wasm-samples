@@ -1,2 +1,2 @@
-declare interface IWasmSmartUploadWebPartStrings { PropertyPaneDescription: string; BasicGroupName: string; DescriptionFieldLabel: string; }
+declare interface IWasmSmartUploadWebPartStrings { PropertyPaneDescription: string; BasicGroupName: string; DescriptionFieldLabel: string; megabytes: string; kilobytes: string; bytes: string; workerFailed: string; fileRequired: string; simulationComplete: string; [key: string]: string; }
 declare module 'WasmSmartUploadWebPartStrings' { const strings: IWasmSmartUploadWebPartStrings; export = strings; }

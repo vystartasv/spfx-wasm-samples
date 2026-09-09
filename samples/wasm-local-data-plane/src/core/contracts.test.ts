@@ -1,4 +1,5 @@
 import { applyMigrations, MIGRATIONS } from './schema';
+import { isValidRpcRequest } from './types';
 import { classifyFailure, cursorAfterPage, graphBatches, MAX_GRAPH_BATCH_REQUESTS, opaqueCursor, replayState } from './sync-contract';
 
 describe('local data-plane contracts', () => {
@@ -44,4 +45,5 @@ describe('local data-plane contracts', () => {
     expect(classifyFailure({ code: 'OFFLINE' })).toMatchObject({ code: 'OFFLINE', retryable: true });
     expect(classifyFailure({ status: 429 })).toMatchObject({ code: 'THROTTLED', retryable: true });
   });
+  test.each([null, 1, {}, { version: 2, id: 'x', method: 'status' }, { version: 1, method: 'status' }, { version: 1, id: 'x', method: 'unknown' }, { version: 1, id: 'x', method: 'sync', payload: 1 }])('rejects malformed data-plane RPC requests: %p', request => expect(isValidRpcRequest(request)).toBe(false));
 });

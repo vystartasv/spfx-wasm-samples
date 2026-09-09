@@ -12,6 +12,7 @@
     "samples/wasm-sqlite-cache"
   ],
   "scripts": {
+    "check:coherence": "node scripts/coherence-check.mjs",
     "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector && npm run test:local-ocr && npm run test:smart-upload && npm run test:sqlite-cache",
     "test:image-upload": "npm --workspace samples/wasm-image-upload run test",
     "test:local-data-plane": "npm --workspace samples/wasm-local-data-plane run test",
