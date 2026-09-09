@@ -17,9 +17,13 @@ for (const workspace of workspaces) {
   for (const required of ['README.md', 'src']) if (!existsSync(resolve(directory, required))) failures.push(`${workspace}: missing ${required}`);
   const loc = resolve(directory, 'src/webparts');
   if (!existsSync(loc)) { failures.push(`${workspace}: missing src/webparts`); continue; }
-  const webpart = readFileSync(packagePath, 'utf8').match(/"name":\s*"([^"]+)"/)?.[1];
-  const manifest = resolve(directory, 'src/webparts', webpart === 'spfx-wasm-samples' ? 'wasmImageUpload' : webpart.replace(/^wasm-/, 'wasm').replace(/-([a-z])/g, (_, c) => c.toUpperCase()));
-  if (!existsSync(resolve(manifest, 'loc/en-us.js')) || !existsSync(resolve(manifest, 'loc/mystrings.d.ts'))) failures.push(`${workspace}: missing localization resources`);
+  const localizedWebparts = readdirSync(loc, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .sort()
+    .filter(name => existsSync(resolve(loc, name, 'loc/en-us.js')) && existsSync(resolve(loc, name, 'loc/mystrings.d.ts')));
+  if (localizedWebparts.length === 0) failures.push(`${workspace}: missing localization resources (no webpart directory contains both files)`);
+  if (localizedWebparts.length > 1) failures.push(`${workspace}: ambiguous localization resources (webparts: ${localizedWebparts.join(', ')})`);
   for (const script of ['test', 'build', 'package-solution']) if (!sample.scripts?.[script]) failures.push(`${workspace}: missing ${script} script`);
   if (!containsTest(resolve(directory, 'src'))) failures.push(`${workspace}: missing TypeScript test`);
 }
