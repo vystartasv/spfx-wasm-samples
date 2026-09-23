@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Evidence-driven SharePoint Framework samples, led by a read-only Change Radar for reviewing page impact before a site change.">
+    <title>SPFx + WebAssembly samples · Change Radar</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+      try {
+        const theme = localStorage.getItem('spfx-wasm-theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./" aria-label="SPFx and WebAssembly samples home">
+          <span class="brand-mark" aria-hidden="true">W</span>
+          <span><strong>SPFx<span class="brand-plus">+</span>WASM</strong><small>reference repository</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#change-radar">Change Radar</a>
+          <a href="#samples">Samples</a>
+          <a href="#evidence">Evidence</a>
+          <a href="https://github.com/vystartasv/spfx-wasm-samples" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+        <label class="theme-control" for="theme-select">
+          <span class="sr-only">Color theme</span>
+          <select id="theme-select" aria-label="Color theme">
+            <option value="auto">Auto</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero container" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>New / decision engine</p>
+          <h1 id="hero-title">See the blast radius before you change SharePoint<span class="accent">.</span></h1>
+          <p class="hero-lede">SharePoint Change Radar turns a proposed retire, move, rename, or replace into a read-only impact review—direct links, indirect paths, cycles, and unresolved references in one bounded result.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#change-radar">Explore Change Radar <span aria-hidden="true">↓</span></a>
+            <a class="button button-secondary" href="#samples">Browse all 10 samples <span aria-hidden="true">→</span></a>
+          </div>
+          <p class="hero-note"><span class="signal" aria-hidden="true"></span>10 samples · SPFx 1.24.0 target · published stable packages remain 1.23.2 · no tenant evidence claimed</p>
+        </div>
+
+        <aside class="radar-preview" aria-labelledby="preview-title">
+          <div class="preview-topline"><span class="preview-kicker">Change Radar / 01</span><span class="preview-status">local fixture</span></div>
+          <div class="preview-title-row"><div><p class="preview-label">Decision engine</p><h2 id="preview-title">Retire <code>/Legacy.aspx</code></h2></div><span class="read-only">READ ONLY</span></div>
+          <div class="preview-meta"><span>Demo fixture · verified path</span><span>Native TypeScript</span></div>
+          <div class="impact-map" role="img" aria-label="Static Change Radar preview showing a target page with direct, indirect, cyclic, and unresolved impact paths. This is a local fixture illustration, not tenant evidence.">
+            <span class="map-line line-direct" aria-hidden="true"></span><span class="map-line line-indirect" aria-hidden="true"></span><span class="map-line line-cycle" aria-hidden="true"></span><span class="map-line line-unresolved" aria-hidden="true"></span>
+            <span class="map-node node-home">Home <b>direct</b></span>
+            <span class="map-node node-guide">Guide <b>indirect</b></span>
+            <span class="map-node node-cycle">Cycle A <b>cyclic</b></span>
+            <span class="map-node node-missing">Missing <b>unresolved</b></span>
+            <span class="map-target"><span class="target-pulse" aria-hidden="true"></span>Legacy.aspx</span>
+          </div>
+          <div class="preview-footer"><span>bounded graph review</span><span>no upload · no write</span></div>
+        </aside>
+      </section>
+
+      <section class="boundary-band" id="evidence" aria-labelledby="boundary-title">
+        <div class="container boundary-grid">
+          <div>
+            <p class="eyebrow eyebrow-muted">Read the boundary</p>
+            <h2 id="boundary-title">Local proof, clearly separated from deployment proof.</h2>
+            <p class="boundary-copy">The repository can verify contracts, fixtures, limits, and packaging locally. It cannot turn those checks into tenant, browser, permission, or performance evidence.</p>
+          </div>
+          <div class="boundary-points">
+            <div class="boundary-point"><span class="point-icon">✓</span><span><strong>Verified locally</strong><small>Change Radar’s deterministic fixture, native graph logic, read-only request shape, worker contract, and repository tests.</small></span></div>
+            <div class="boundary-point"><span class="point-icon">?</span><span><strong>Tenant / browser evidence pending</strong><small>No controlled tenant run, screenshot, completeness result, permission result, or browser compatibility claim is included.</small></span></div>
+            <div class="boundary-point"><span class="point-icon">1.24</span><span><strong>Target versus published package</strong><small>SPFx 1.24.0 is the target; packages remain pinned to published stable SPFx 1.23.2.</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container featured-section" id="change-radar" aria-labelledby="radar-title">
+        <div class="section-heading split-heading">
+          <div><p class="eyebrow">Flagship sample / native path</p><h2 id="radar-title">A decision engine for page changes.</h2></div>
+          <p>Change Radar is deliberately no-WASM: native TypeScript is the correctness oracle, with a versioned RPC to a dedicated worker and a typed current-site GET-only boundary.</p>
+        </div>
+        <div class="radar-feature">
+          <div class="radar-feature-copy">
+            <div class="feature-badge"><span>NO WASM</span><span>MATURITY L2</span><span>NO SHAREPOINT WRITE</span></div>
+            <h3>Ask what breaks before the site changes.</h3>
+          <p>Simulate a retire, move, rename, or replace with the deterministic local fixture, choose a target, then review bounded reverse reachability. The fixture includes direct and indirect references, a cycle, missing and external references, duplicate URLs, malformed content, and permission/throttle warnings.</p>
+            <div class="workflow" aria-label="Change Radar workflow">
+              <div><span>01</span><strong>Propose</strong><small>retire · move · rename · replace</small></div>
+              <div><span>02</span><strong>Trace</strong><small>direct · indirect · cyclic · unresolved</small></div>
+              <div><span>03</span><strong>Review</strong><small>bounded table · warnings · local export</small></div>
+            </div>
+            <a class="text-link" href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/samples/wasm-change-radar/README.md" rel="noreferrer">Read the Change Radar README <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="radar-facts" aria-label="Change Radar evidence and boundaries">
+            <div class="fact-row"><span>Engine</span><strong>Native TypeScript</strong><small>No WASM engine or performance comparison claim.</small></div>
+            <div class="fact-row"><span>Source</span><strong>Demo fixture</strong><small>Deterministic local path; makes no network request.</small></div>
+            <div class="fact-row"><span>Optional boundary</span><strong>Current-site GET-only adapter stub</strong><small>Tenant completeness, permissions, throttling, and browser behavior are not verified.</small></div>
+            <div class="fact-row"><span>Hard limits</span><strong>80 pages · 64 KiB · 50 refs/page · 5 requests</strong><small>Target and replacement URLs remain same-site and within the managed path.</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container" id="architecture" aria-labelledby="architecture-title">
+        <div class="section-heading split-heading">
+          <div><p class="eyebrow">The reference pattern</p><h2 id="architecture-title">Keep the engine behind a contract.</h2></div>
+          <p>TypeScript owns UI, validation, cancellation, accessibility, and host integration. A dedicated worker owns expensive or stateful work and returns a shaped result.</p>
+        </div>
+        <div class="architecture-visual" role="img" aria-label="SPFx web part sends versioned messages through a typed worker contract to a native baseline or WASM engine, which returns a shaped result and status. An explicit user action can reach the SharePoint adapter.">
+          <div class="arch-node arch-ui"><span class="node-kicker">01 / host</span><strong>SPFx web part</strong><small>UI · validation · a11y</small></div>
+          <div class="arch-connector"><span>versioned messages</span></div>
+          <div class="arch-node arch-worker"><span class="node-kicker">02 / boundary</span><strong>Web Worker</strong><small>status · result · error</small></div>
+          <div class="arch-connector"><span>engine-owned work</span></div>
+          <div class="arch-engines">
+            <div class="arch-node arch-native"><span class="node-kicker">03a / compare</span><strong>Native baseline</strong><small>browser capability</small></div>
+            <div class="arch-or">or</div>
+            <div class="arch-node arch-wasm"><span class="node-kicker">03b / option</span><strong>WASM engine</strong><small>lazy · packaged · bounded</small></div>
+          </div>
+          <div class="arch-result"><span class="result-line"></span><span><strong>shaped result</strong><small>actual engine · measurement · warning</small></span></div>
+          <div class="arch-write"><span class="write-arrow">↘</span><span><strong>explicit action only</strong><small>SharePoint adapter / current site</small></span></div>
+        </div>
+        <div class="principle-grid">
+          <article class="principle-card"><span class="card-number">01</span><h3>Worker by default</h3><p>Expensive or stateful engines stay off the UI thread, with cancellation and cleanup visible in the contract.</p></article>
+          <article class="principle-card"><span class="card-number">02</span><h3>Baseline first</h3><p>Every WASM experiment names a native or no-engine baseline. A package is not a performance conclusion.</p></article>
+          <article class="principle-card"><span class="card-number">03</span><h3>Failure is a result</h3><p>Actual engine, fallback, warning, and error states remain inspectable instead of being hidden by the demo.</p></article>
+          <article class="principle-card"><span class="card-number">04</span><h3>Network is opt-in</h3><p>Bytes stay local by default. SharePoint writes require an explicit UI action and a metadata declaration.</p></article>
+        </div>
+      </section>
+
+      <section class="section section-tint" id="samples" aria-labelledby="samples-title">
+        <div class="container">
+          <div class="section-heading split-heading">
+            <div><p class="eyebrow">Reference inventory / 10 samples</p><h2 id="samples-title">Choose the workload, then inspect the trade-off.</h2></div>
+            <p>Every card is sourced from a checked-in <code>sample.yml</code>. Filter by engine path or network boundary; no card implies tenant or browser evidence.</p>
+          </div>
+          <div class="explorer-tools">
+            <label class="search-field" for="sample-search"><span aria-hidden="true">⌕</span><span class="sr-only">Search samples</span><input id="sample-search" type="search" placeholder="Search by workload, engine, or boundary" autocomplete="off"></label>
+            <label class="filter-field" for="sample-filter"><span class="sr-only">Filter samples</span><select id="sample-filter"><option value="all">All paths</option><option value="wasm">WASM included</option><option value="native">No WASM</option><option value="writes">SharePoint writes</option></select></label>
+            <p class="explorer-count" id="sample-count" role="status" aria-live="polite"></p>
+          </div>
+          <div class="sample-grid" id="sample-grid"></div>
+          <p class="empty-state" id="sample-empty" hidden>No samples match that search. Try a broader term or reset the filter.</p>
+        </div>
+      </section>
+
+      <section class="section container quick-start" id="quick-start" aria-labelledby="quick-start-title">
+        <div class="quick-start-copy"><p class="eyebrow">Start from the root</p><h2 id="quick-start-title">Run the evidence loop.</h2><p>The first sample is a complete generated SPFx project. Install once, run the repository checks, then open the local workbench and measure the task in the browser.</p><a class="text-link" href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/samples/wasm-change-radar/README.md" rel="noreferrer">Start with Change Radar’s README <span aria-hidden="true">↗</span></a></div>
+        <div class="command-card" aria-label="Quick start commands"><div class="command-card-top"><span><i></i><i></i><i></i></span><small>terminal / repository root</small><button class="copy-button" type="button" data-copy="npm ci&#10;npm test&#10;npm run build&#10;npm run package-solution" aria-label="Copy quick start commands">Copy</button></div><pre><code><span class="prompt">$</span> npm ci
+<span class="prompt">$</span> npm test
+<span class="prompt">$</span> npm run build
+<span class="prompt">$</span> npm run package-solution</code></pre><p>Then <code>npm run start:change-radar</code> and open the local workbench.</p></div>
+      </section>
+
+      <section class="docs-rail" aria-labelledby="docs-title">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow">Go deeper</p><h2 id="docs-title">Read the decisions behind the samples.</h2></div>
+          <div class="docs-links">
+            <a href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/docs/WHAT-IS-WASM-IN-SPFX.md" rel="noreferrer"><span>What WASM is in SPFx</span><small>orientation</small><b aria-hidden="true">↗</b></a>
+            <a href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/docs/WHEN-TO-USE-WASM.md" rel="noreferrer"><span>When to use WASM</span><small>decision guide</small><b aria-hidden="true">↗</b></a>
+            <a href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/docs/SECURITY.md" rel="noreferrer"><span>WASM security model</span><small>trust boundaries</small><b aria-hidden="true">↗</b></a>
+            <a href="https://github.com/vystartasv/spfx-wasm-samples/blob/main/docs/BENCHMARKING.md" rel="noreferrer"><span>Benchmarking</span><small>evidence method</small><b aria-hidden="true">↗</b></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner"><span>SPFx + WebAssembly samples</span><span>MIT · evidence-driven · <a href="https://github.com/vystartasv/spfx-wasm-samples" rel="noreferrer">view repository ↗</a></span></div>
+    </footer>
+    <script src="app.js" defer></script>
+  </body>
+</html>

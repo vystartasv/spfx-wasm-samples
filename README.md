@@ -32,11 +32,12 @@ The worker is the default boundary for expensive or stateful engines. TypeScript
 | [SQLite list cache](samples/wasm-sqlite-cache/) | Demonstrate a worker-owned SQLite-WASM cache with local CRUD and simulated sync states. | @sqlite.org/sqlite-wasm 3.53.4-build1 | Sample-local memory store | No | L2 |
 | [Local QR and barcode scanner](samples/wasm-qr-scanner/) | Scan selected still images with native BarcodeDetector and a visible packaged ZBar fallback. | @undecaf/zbar-wasm 0.11.0 | Browser BarcodeDetector when available and successful | No | L2 |
 | [Local PDF inspector](samples/wasm-pdf-inspector/) | Inspect metadata and preview a selected local PDF with packaged PDFium WASM. | @hyzyla/pdfium 2.1.13 | No alternate PDF engine; failure is surfaced | No | L2 |
+| [SharePoint Change Radar](samples/wasm-change-radar/) | Review read-only page and URL impact before retiring, moving, renaming, or replacing a target. | No WASM | Native TypeScript URL graph analysis | No | L2 |
 <!-- GENERATED:SAMPLE-MATRIX:END -->
 
 Metadata is the source for this matrix. Run `node scripts/generate-readme.mjs` after changing a sample’s `sample.yml`; coherence fails if the generated section is stale.
 
-Nine samples are included; the generated matrix above is their inventory. Validation status, deployment boundaries, and evidence level live with each sample’s metadata and documentation.
+Ten samples are included; the generated matrix above is their inventory. Validation status, deployment boundaries, and evidence level live with each sample’s metadata and documentation.
 
 The first sample is a complete generated SPFx project at `samples/wasm-image-upload/`. Root commands delegate to that workspace and the root lockfile keeps installation reproducible.
 

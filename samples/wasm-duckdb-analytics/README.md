@@ -1,6 +1,6 @@
 # DuckDB-WASM analytics
 
-Runnable SPFx 1.23.2 sample comparing a native TypeScript aggregation with an optional DuckDB-WASM aggregation. The fixture contains 100,000 deterministic rows and is generated only after the user presses **Generate/load fixture**.
+Targets SPFx 1.24.0. npm's latest stable package is currently 1.23.2, so this sample remains pinned to 1.23.2 until 1.24.0 is published. It compares a native TypeScript aggregation with an optional DuckDB-WASM aggregation. The fixture contains 100,000 deterministic rows and is generated only after the user presses **Generate/load fixture**.
 
 SQLite remains the operational and sync database. DuckDB is not a replacement for it: this sample demonstrates when a measured scan/aggregation workload can justify an analytical engine.
 

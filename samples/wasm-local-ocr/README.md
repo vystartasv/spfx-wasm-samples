@@ -1,6 +1,6 @@
 # Local OCR SPFx sample
 
-SPFx 1.23.2 web part that recognizes one selected local image in a dedicated browser worker. The file is read with `File.arrayBuffer()` and transferred to the worker; there is no SharePoint, telemetry, or upload call.
+Targets SPFx 1.24.0. npm's latest stable package is currently 1.23.2, so this sample remains pinned to 1.23.2 until 1.24.0 is published. It recognizes one selected local image in a dedicated browser worker. The file is read with `File.arrayBuffer()` and transferred to the worker; there is no SharePoint, telemetry, or upload call.
 
 ## Run
 

@@ -1,6 +1,6 @@
 # WASM SQLite cache
 
-Small focused SPFx 1.23.2 sample showing a worker-owned local cache for one SharePoint-list-style dataset. It demonstrates schema migration, deterministic fixture hydration, local search/filter/sort, optimistic CRUD, outbox markers, explicit simulated sync success/failure/conflict states, namespace keying, reset, OPFS preference, and memory fallback.
+Targets SPFx 1.24.0. npm's latest stable package is currently 1.23.2, so this sample remains pinned to 1.23.2 until 1.24.0 is published. It shows a worker-owned local cache for one SharePoint-list-style dataset, including schema migration, deterministic fixture hydration, local search/filter/sort, optimistic CRUD, outbox markers, explicit simulated sync success/failure/conflict states, namespace keying, reset, OPFS preference, and memory fallback.
 
 ## Run
 

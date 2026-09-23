@@ -1,11 +1,11 @@
 # SPFx WASM Samples — Current State Research
 
-**Research date:** 2026-09-09
-**Target:** SharePoint Online, SPFx 1.23.2, evergreen browsers
+**Research date:** 2026-09-23
+**Target:** SharePoint Online, SPFx 1.24.0 target, evergreen browsers
 
 ## Verified baseline
 
-- **SPFx:** Microsoft’s compatibility table lists SPFx 1.23.2 as the latest listed version. SPFx 1.22+ uses the Heft-based toolchain; Webpack remains part of the build pipeline.
+- **SPFx:** npm metadata reports the latest stable package is 1.23.2 and the next prerelease is 1.24.0-beta.5; the requested 1.24.0 stable package is not published. The samples therefore remain pinned to published SPFx 1.23.2 while targeting SPFx 1.24.0 when released. SPFx 1.22+ uses the Heft-based toolchain; Webpack remains part of the build pipeline. No tenant or browser validation is claimed.
   - https://learn.microsoft.com/en-us/sharepoint/dev/spfx/compatibility
   - https://learn.microsoft.com/en-us/sharepoint/dev/spfx/toolchain/sharepoint-framework-toolchain-rushstack-heft
   - https://learn.microsoft.com/en-us/sharepoint/dev/spfx/release-1.23

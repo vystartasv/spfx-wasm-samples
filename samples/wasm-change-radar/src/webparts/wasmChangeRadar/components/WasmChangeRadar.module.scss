@@ -1,0 +1,25 @@
+.root { font-family: Segoe UI, sans-serif; color: #242424; max-width: 1100px; }
+.intro { max-width: 850px; }
+.controls { border: 1px solid #d2d0ce; padding: 14px; margin: 12px 0; }
+.field { display: grid; gap: 4px; margin: 10px 0; max-width: 720px; }
+.field input, .field select { border: 1px solid #605e5c; border-radius: 2px; font: inherit; padding: 7px; }
+.field input:focus-visible, .field select:focus-visible, button:focus-visible, .table a:focus-visible { outline: 3px solid #005a9e; outline-offset: 2px; }
+.radioGroup { display: flex; flex-wrap: wrap; gap: 12px; }
+.radioGroup label { display: flex; gap: 5px; align-items: center; }
+.hint { color: #605e5c; font-size: .9rem; }
+.limits, .privacy { background: #f3f2f1; padding: 10px; }
+.status { background: #deecf9; padding: 10px; margin: 12px 0; }
+.error { color: #a4262c; font-weight: 600; }
+.warning { color: #8a6d1d; background: #fff4ce; padding: 8px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.toolbar button { padding: 8px 13px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 12px 0; }
+.summary div { border: 1px solid #d2d0ce; padding: 9px; }
+.summary dt { color: #605e5c; font-size: .85rem; }
+.summary dd { font-size: 1.25rem; font-weight: 600; margin: 4px 0 0; }
+.tableWrap { overflow-x: auto; }
+.table { border-collapse: collapse; width: 100%; min-width: 760px; }
+.table th, .table td { border: 1px solid #d2d0ce; padding: 8px; text-align: left; vertical-align: top; }
+.table th { background: #f3f2f1; }
+.table code { white-space: normal; overflow-wrap: anywhere; }
+.small { font-size: .85rem; color: #605e5c; }

@@ -3,10 +3,12 @@ import { resolve } from 'node:path';
 import { validateMetadata } from './validate-metadata.mjs';
 import { renderMatrix, verifyGeneratedReadme } from './generate-readme.mjs';
 import { validateNotices } from './validate-notices.mjs';
+import { validateCompatibility } from './validate-compatibility.mjs';
 
 const root = process.cwd();
 const rootPackage = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 const failures = [];
+failures.push(...validateCompatibility(root));
 const workspaces = rootPackage.workspaces;
 const requiredDocs = ['docs/WHAT-IS-WASM-IN-SPFX.md', 'docs/WHEN-TO-USE-WASM.md', 'docs/PATTERNS.md', 'docs/WASM-COST-MODEL.md', 'docs/SECURITY.md', 'docs/BENCHMARKING.md', 'docs/BROWSER-SUPPORT.md', 'docs/LICENSING.md', 'docs/architecture/PRINCIPLES.md', 'docs/architecture/WORKER-CONTRACT.md', 'docs/architecture/WASM-LOADING.md', 'docs/standards/SAMPLE-CONTRACT.md', 'docs/standards/CLAIMS.md', 'docs/standards/MATURITY.md', 'docs/standards/ACCESSIBILITY.md', 'docs/standards/sample.schema.json', 'docs/decisions/ADR-001-worker-by-default.md', 'docs/decisions/ADR-002-native-baseline.md', 'docs/decisions/ADR-003-explicit-write-boundary.md', 'docs/decisions/ADR-004-wasm-behind-typescript-contract.md'];
 for (const document of requiredDocs) if (!existsSync(resolve(root, document))) failures.push(`missing canonical document ${document}`);

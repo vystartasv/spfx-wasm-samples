@@ -1,6 +1,6 @@
 # Privacy-first smart upload accelerator
 
-Runnable SPFx 1.23.2 web part. Select or drop one file, choose a deterministic chunk size, and press **Prepare locally**. A dedicated Web Worker uses browser Web Crypto SHA-256 to hash the whole file and every chunk. The UI reports measured hashing, chunking, total time, byte size, and chunk count. Timings are from the current browser run; no timing is fabricated.
+Targets SPFx 1.24.0. npm's latest stable package is currently 1.23.2, so this sample remains pinned to 1.23.2 until 1.24.0 is published. Select or drop one file, choose a deterministic chunk size, and press **Prepare locally**. A dedicated Web Worker uses browser Web Crypto SHA-256 to hash the whole file and every chunk. The UI reports measured hashing, chunking, total time, byte size, and chunk count. Timings are from the current browser run; no timing is fabricated.
 
 ## Upload boundary
 

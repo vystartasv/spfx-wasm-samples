@@ -1,0 +1,21 @@
+[
+  {
+    "name": "spfx-wasm-samples-wasm-change-radar",
+    "source": "spfx-wasm-samples",
+    "title": "SharePoint Change Radar",
+    "shortDescription": "Review local or bounded current-site references before changing a SharePoint page or URL.",
+    "longDescription": [
+      "Targets SPFx 1.24.0; current packages remain pinned to published stable SPFx 1.23.2 because 1.24.0 is not published. Uses a native TypeScript graph oracle in a dedicated worker; demo mode is deterministic and read-only."
+    ],
+    "creationDateTime": "2026-09-23",
+    "updateDateTime": "2026-09-23",
+    "products": ["SharePoint"],
+    "metadata": [
+      { "key": "SAMPLE-TYPE", "value": "SPFx-WebPart" },
+      { "key": "CLIENT-SIDE-DEV", "value": "React" },
+      { "key": "SPFX-VERSION", "value": "1.23.2" }
+    ],
+    "thumbnails": [],
+    "references": []
+  }
+]

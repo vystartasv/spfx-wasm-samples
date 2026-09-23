@@ -7,7 +7,7 @@ The displayed engine is the engine used for the run: `WASM`, `Browser-native`, o
 ## Prerequisites
 
 - Node.js 22.14.x through 22.x, npm, and a supported evergreen browser.
-- An SPFx 1.23.2 development environment.
+- The repository targets SPFx 1.24.0; npm's latest stable package is currently 1.23.2, so this sample remains pinned to 1.23.2 until 1.24.0 is published.
 - For upload validation, an authorized SharePoint Online site where the signed-in user can add files to Site Assets.
 
 ## Run and verify

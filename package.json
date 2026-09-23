@@ -11,14 +11,17 @@
     "samples/wasm-smart-upload",
     "samples/wasm-sqlite-cache",
     "samples/wasm-qr-scanner",
-    "samples/wasm-pdf-inspector"
+    "samples/wasm-pdf-inspector",
+    "samples/wasm-change-radar"
   ],
   "scripts": {
     "check:coherence": "node scripts/coherence-check.mjs",
+    "validate:compatibility": "node scripts/validate-compatibility.mjs",
     "generate:readme": "node scripts/generate-readme.mjs",
     "validate:metadata": "node scripts/validate-metadata.mjs",
     "validate:notices": "node scripts/validate-notices.mjs",
-    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector && npm run test:local-ocr && npm run test:smart-upload && npm run test:sqlite-cache && npm run test:qr-scanner && npm run test:pdf-inspector",
+    "validate:site": "node scripts/validate-site.mjs",
+    "test": "npm run test:image-upload && npm run test:local-data-plane && npm run test:duckdb-analytics && npm run test:duplicate-detector && npm run test:local-ocr && npm run test:smart-upload && npm run test:sqlite-cache && npm run test:qr-scanner && npm run test:pdf-inspector && npm run test:change-radar",
     "test:image-upload": "npm --workspace samples/wasm-image-upload run test",
     "test:local-data-plane": "npm --workspace samples/wasm-local-data-plane run test",
     "test:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run test",
@@ -28,7 +31,8 @@
     "test:sqlite-cache": "npm --workspace samples/wasm-sqlite-cache run test",
     "test:qr-scanner": "npm --workspace samples/wasm-qr-scanner run test",
     "test:pdf-inspector": "npm --workspace samples/wasm-pdf-inspector run test",
-    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics && npm run build:duplicate-detector && npm run build:local-ocr && npm run build:smart-upload && npm run build:sqlite-cache && npm run build:qr-scanner && npm run build:pdf-inspector",
+    "test:change-radar": "npm --workspace samples/wasm-change-radar run test",
+    "build": "npm run build:image-upload && npm run build:local-data-plane && npm run build:duckdb-analytics && npm run build:duplicate-detector && npm run build:local-ocr && npm run build:smart-upload && npm run build:sqlite-cache && npm run build:qr-scanner && npm run build:pdf-inspector && npm run build:change-radar",
     "build:image-upload": "npm --workspace samples/wasm-image-upload run build",
     "build:local-data-plane": "npm --workspace samples/wasm-local-data-plane run build",
     "build:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run build",
@@ -38,7 +42,8 @@
     "build:sqlite-cache": "npm --workspace samples/wasm-sqlite-cache run build",
     "build:qr-scanner": "npm --workspace samples/wasm-qr-scanner run build",
     "build:pdf-inspector": "npm --workspace samples/wasm-pdf-inspector run build",
-    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics && npm run package:duplicate-detector && npm run package:local-ocr && npm run package:smart-upload && npm run package:sqlite-cache && npm run package:qr-scanner && npm run package:pdf-inspector",
+    "build:change-radar": "npm --workspace samples/wasm-change-radar run build",
+    "package-solution": "npm run package:image-upload && npm run package:local-data-plane && npm run package:duckdb-analytics && npm run package:duplicate-detector && npm run package:local-ocr && npm run package:smart-upload && npm run package:sqlite-cache && npm run package:qr-scanner && npm run package:pdf-inspector && npm run package:change-radar",
     "package:image-upload": "npm --workspace samples/wasm-image-upload run package-solution",
     "package:local-data-plane": "npm --workspace samples/wasm-local-data-plane run package-solution",
     "package:duckdb-analytics": "npm --workspace samples/wasm-duckdb-analytics run package-solution",
@@ -48,9 +53,11 @@
     "package:sqlite-cache": "npm --workspace samples/wasm-sqlite-cache run package-solution",
     "package:qr-scanner": "npm --workspace samples/wasm-qr-scanner run package-solution",
     "package:pdf-inspector": "npm --workspace samples/wasm-pdf-inspector run package-solution",
+    "package:change-radar": "npm --workspace samples/wasm-change-radar run package-solution",
     "start": "npm --workspace samples/wasm-image-upload run start",
     "start:duplicate-detector": "npm --workspace samples/wasm-duplicate-detector run start",
-    "start:smart-upload": "npm --workspace samples/wasm-smart-upload run start"
+    "start:smart-upload": "npm --workspace samples/wasm-smart-upload run start",
+    "start:change-radar": "npm --workspace samples/wasm-change-radar run start"
   },
   "engines": {
     "node": ">=22.14.0 <23.0.0"
